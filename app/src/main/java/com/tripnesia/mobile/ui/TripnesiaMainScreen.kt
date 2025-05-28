@@ -1,4 +1,3 @@
-// TripnesiaMainScreen.kt
 package com.tripnesia.mobile.ui
 
 import DestinationScreen
@@ -26,7 +25,7 @@ fun TripnesiaMainScreen() {
     val window = (context as Activity).window
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-        window.statusBarColor = Color(0xFF003366).toArgb() // Example: setting color to blue
+        window.statusBarColor = Color(0xFF003366).toArgb()
         WindowInsetsControllerCompat(window, window.decorView).isAppearanceLightStatusBars = false
     }
 
