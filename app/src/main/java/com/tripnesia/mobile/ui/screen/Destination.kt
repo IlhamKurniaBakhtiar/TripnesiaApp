@@ -1,4 +1,7 @@
+package com.tripnesia.mobile.ui.screen
+
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -14,13 +17,69 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.tripnesia.mobile.R
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
+import com.tripnesia.mobile.data.model.Destination
+import com.tripnesia.mobile.data.dummy.DestinationData
 
-// Data class destinasi
-data class Destination(
-    val title: String,
-    val description: String,
-    val imageRes: Int
-)
+
+
+
+
+@Composable
+fun HeaderDestinasi() {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(150.dp)
+    ) {
+        // 1. Gambar background
+        Image(
+            painter = painterResource(id = R.drawable.raja_ampat),
+            contentDescription = "Header Background",
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.matchParentSize()
+        )
+
+        // 2. Layer hitam transparan
+        Box(
+            modifier = Modifier
+                .matchParentSize()
+                .background(Color.Black.copy(alpha = 0.4f)) // alpha = 40% transparan
+        )
+
+        // 3. Teks paling atas
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "Temukan Surga Tersembunyi di Indonesia",
+                style = MaterialTheme.typography.headlineSmall.copy(
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold
+                ),
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = "Dari pegunungan sejuk hingga laut tropis yang jernih",
+                style = MaterialTheme.typography.bodyMedium.copy(
+                    color = Color.White
+                ),
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+    }
+}
+
+
 
 // Card untuk satu destinasi
 @Composable
@@ -57,44 +116,39 @@ fun DestinationCard(destination: Destination, modifier: Modifier = Modifier) {
     }
 }
 
-// Grid untuk menampilkan semua destinasi
 @Composable
 fun DestinationScreen(destinations: List<Destination>) {
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(2),
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(8.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        items(destinations) { destination ->
-            DestinationCard(destination = destination)
-        }
+    Column {
+        HeaderDestinasi()
+        Text(
+            text = "Destinasi Wisata Yang Mungkin Kamu Suka",
+            style = MaterialTheme.typography.headlineSmall,
+            modifier = Modifier.padding(16.dp).fillMaxWidth(),
+            textAlign = TextAlign.Center
+        )
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            content = {
+                items(destinations) { destination ->
+                    DestinationCard(destination = destination)
+                }
+            }
+        )
     }
 }
+
 
 // Preview dengan data dummy
 @Preview(showBackground = true, name = "destinasi")
 @Composable
 fun DestinationScreenPreview() {
-
-    val sampleDestinations = listOf(
-        Destination("Pantai Kuta", "Pantai terkenal di Bali dengan pasir putih.", R.drawable.kuta),
-        Destination("Labuan Bajo", "Gerbang ke Taman Nasional Komodo.", R.drawable.labuan_bajo),
-        Destination("Pulau Komodo", "Habitat asli Komodo, warisan dunia.", R.drawable.pulau_komodo),
-        Destination("Raja Ampat", "Surga bawah laut yang indah di Papua.", R.drawable.raja_ampat),
-        Destination("Pantai Kuta", "Pantai terkenal di Bali dengan pasir putih.", R.drawable.kuta),
-        Destination("Labuan Bajo", "Gerbang ke Taman Nasional Komodo.", R.drawable.labuan_bajo),
-        Destination("Pulau Komodo", "Habitat asli Komodo, warisan dunia.", R.drawable.pulau_komodo),
-        Destination("Raja Ampat", "Surga bawah laut yang indah di Papua.", R.drawable.raja_ampat),
-        Destination("Pantai Kuta", "Pantai terkenal di Bali dengan pasir putih.", R.drawable.kuta),
-        Destination("Labuan Bajo", "Gerbang ke Taman Nasional Komodo.", R.drawable.labuan_bajo),
-        Destination("Pulau Komodo", "Habitat asli Komodo, warisan dunia.", R.drawable.pulau_komodo),
-        Destination("Raja Ampat", "Surga bawah laut yang indah di Papua.", R.drawable.raja_ampat),
-    )
-
     MaterialTheme {
-        DestinationScreen(destinations = sampleDestinations)
+        DestinationScreen(destinations = DestinationData.destinations)
     }
+
 }
