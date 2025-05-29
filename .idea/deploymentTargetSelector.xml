@@ -2,8 +2,9 @@
 <project version="4">
   <component name="deploymentTargetSelector">
     <selectionStates>
-      <SelectionState runConfigName="app">
+      <SelectionState runConfigName="TripnesiaMobile.app">
         <option name="selectionMode" value="DROPDOWN" />
+<<<<<<< HEAD
 <<<<<<< HEAD
         <DropdownSelection timestamp="2025-05-29T05:11:17.570946600Z">
           <Target type="DEFAULT_BOOT">
@@ -19,6 +20,8 @@
           </Target>
         </DropdownSelection>
         <DialogSelection />
+=======
+>>>>>>> main
       </SelectionState>
     </selectionStates>
   </component>

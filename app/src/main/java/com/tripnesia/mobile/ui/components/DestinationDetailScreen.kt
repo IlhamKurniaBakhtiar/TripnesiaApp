@@ -1,4 +1,4 @@
-package com.tripnesia.mobile.ui
+package com.tripnesia.mobile.ui.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -11,8 +11,11 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.tripnesia.mobile.data.model.Destination
+<<<<<<< HEAD:app/src/main/java/com/tripnesia/mobile/ui/components/DestinationDetailScreen.kt
 
 
+=======
+>>>>>>> main:app/src/main/java/com/tripnesia/mobile/ui/component/DestinationDetail.kt
 
 @Composable
 fun DestinationDetailScreen(destination: Destination, onBack: () -> Unit = {}) {
