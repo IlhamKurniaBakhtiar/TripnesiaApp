@@ -1,6 +1,7 @@
 package com.tripnesia.mobile.ui.component
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -10,10 +11,23 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.tripnesia.mobile.data.model.Destination
+<<<<<<< HEAD:app/src/main/java/com/tripnesia/mobile/ui/component/DestinationDetail.kt
+=======
+
+
+>>>>>>> origin/main:app/src/main/java/com/tripnesia/mobile/ui/components/DestinationDetailScreen.kt
 
 @Composable
-fun DestinationDetailScreen(destination: Destination) {
+fun DestinationDetailScreen(destination: Destination, onBack: () -> Unit = {}) {
     Column(modifier = Modifier.padding(16.dp)) {
+        Text(
+            text = "← Kembali",
+            style = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.primary),
+            modifier = Modifier
+                .clickable { onBack() }
+                .padding(bottom = 16.dp)
+        )
+
         Image(
             painter = painterResource(id = destination.imageRes),
             contentDescription = destination.title,
