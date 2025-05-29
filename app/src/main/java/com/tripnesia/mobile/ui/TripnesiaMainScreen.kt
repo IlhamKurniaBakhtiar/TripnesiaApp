@@ -65,7 +65,6 @@ fun TripnesiaMainScreen() {
         }
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
-            NavigationDestination(navController = navController)
             when (selectedItemIndex) {
                 0 -> HomeScreen()
                 1 -> EventScreen()

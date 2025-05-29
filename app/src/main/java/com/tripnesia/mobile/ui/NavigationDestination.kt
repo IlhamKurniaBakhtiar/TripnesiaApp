@@ -31,7 +31,8 @@ fun NavigationDestination(navController: NavHostController) {
                 ?.get<Destination>("destination")
 
             if (destination != null) {
-                DestinationDetailScreen(destination = destination)
+                DestinationDetailScreen(destination = destination,
+                    onBack = { navController.popBackStack() })
             }
         }
     }
