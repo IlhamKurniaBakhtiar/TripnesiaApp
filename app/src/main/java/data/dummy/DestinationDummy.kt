@@ -9,25 +9,25 @@ object DestinationData {
         Destination(
             id = 1,
             title = "Raja Ampat",
-            description = "Surga bawah laut yang indah di Papua.",
+            description = "Raja Ampat adalah gugusan kepulauan yang terletak di ujung barat Papua dan dikenal sebagai surga bawah laut dunia. Keindahan alamnya yang masih sangat alami menjadi daya tarik utama bagi para penyelam dan wisatawan. Perairan Raja Ampat memiliki lebih dari 1.500 pulau kecil dan atol, serta menyimpan lebih dari 1.300 spesies ikan dan 600 spesies karang, menjadikannya salah satu kawasan dengan keanekaragaman hayati laut tertinggi di dunia. Selain menyelam dan snorkeling, pengunjung juga bisa menikmati pemandangan dari atas bukit, menjelajahi desa-desa tradisional, dan merasakan budaya lokal yang ramah serta otentik.",
             imageRes = com.tripnesia.mobile.R.drawable.raja_ampat
         ),
         Destination(
             id = 2,
             title = "Pantai Kuta",
-            description = "Pantai terkenal di Bali dengan pasir putih.",
+            description = "Pantai Kuta adalah ikon pariwisata Bali yang terkenal dengan garis pantai panjang berpasir putih dan ombak yang cocok untuk berselancar. Lokasinya yang dekat dengan Bandara Internasional Ngurah Rai membuatnya sangat mudah diakses oleh wisatawan domestik maupun mancanegara. Suasana pantainya yang ramai, deretan kafe dan restoran tepi pantai, serta aktivitas seperti parasailing dan banana boat menjadikan Kuta tempat favorit untuk bersantai maupun berpetualang. Menjelang sore hari, matahari terbenam di Kuta menghadirkan panorama luar biasa yang selalu memikat hati para pengunjung.",
             imageRes = com.tripnesia.mobile.R.drawable.kuta
         ),
         Destination(
             id = 3,
             title = "Labuan Bajo",
-            description = "Gerbang ke Taman Nasional Komodo.",
+            description = "Labuan Bajo, yang terletak di ujung barat Pulau Flores, Nusa Tenggara Timur, adalah pintu gerbang menuju keajaiban Taman Nasional Komodo. Dahulu hanyalah sebuah desa nelayan kecil, kini Labuan Bajo telah berkembang menjadi destinasi wisata kelas dunia dengan berbagai fasilitas modern. Selain sebagai titik awal menuju Pulau Komodo, Labuan Bajo menawarkan pemandangan laut biru kristal, pulau-pulau eksotis, dan aktivitas seperti menyelam, island hopping, serta menikmati sunset dari Bukit Sylvia. Wilayah ini juga menjadi tempat penting untuk mengenal budaya Manggarai dan keanekaragaman kuliner lokalnya.",
             imageRes = com.tripnesia.mobile.R.drawable.labuan_bajo
         ),
         Destination(
             id = 4,
             title = "Pulau Komodo",
-            description = "Habitat asli Komodo, warisan dunia.",
+            description = "Pulau Komodo merupakan rumah bagi hewan purba langka, Komodo, yang hanya dapat ditemukan di Indonesia. Pulau ini termasuk dalam kawasan Taman Nasional Komodo yang telah diakui sebagai Situs Warisan Dunia oleh UNESCO. Wisatawan dapat menjelajahi pulau dengan dipandu ranger untuk melihat Komodo di habitat aslinya. Selain itu, pulau ini juga menawarkan keindahan alam yang luar biasa seperti pantai berpasir merah muda (Pink Beach), bukit savana yang luas, serta perairan yang cocok untuk snorkeling dan diving. Pulau Komodo adalah tempat ideal bagi pecinta petualangan dan alam liar.",
             imageRes = com.tripnesia.mobile.R.drawable.pulau_komodo
         ),
         Destination(
