@@ -2,12 +2,19 @@
 <project version="4">
   <component name="deploymentTargetSelector">
     <selectionStates>
-      <SelectionState runConfigName="TripnesiaMobile.app">
+      <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
+<<<<<<< HEAD
         <DropdownSelection timestamp="2025-05-29T05:11:17.570946600Z">
           <Target type="DEFAULT_BOOT">
             <handle>
               <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\robby\.android\avd\Pixel_6a.avd" />
+=======
+        <DropdownSelection timestamp="2025-05-29T06:55:56.927872800Z">
+          <Target type="DEFAULT_BOOT">
+            <handle>
+              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\Asus\.android\avd\Medium_Phone.avd" />
+>>>>>>> ee03b1fcd01cbec66cdfccd1e5029a6ac5125a66
             </handle>
           </Target>
         </DropdownSelection>
