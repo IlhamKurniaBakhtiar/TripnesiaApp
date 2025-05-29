@@ -11,10 +11,18 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.tripnesia.mobile.data.model.Destination
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 
 @Composable
 fun DestinationDetailScreen(destination: Destination, onBack: () -> Unit = {}) {
-    Column(modifier = Modifier.padding(16.dp)) {
+    val scrollState = rememberScrollState()
+
+    Column(
+        modifier = Modifier
+            .padding(16.dp)
+            .verticalScroll(scrollState)
+    ) {
         Text(
             text = "← Kembali",
             style = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.primary),
