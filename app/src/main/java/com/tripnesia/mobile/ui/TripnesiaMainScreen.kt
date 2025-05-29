@@ -10,14 +10,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
-import com.tripnesia.mobile.ui.theme.blueDark
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
-import com.tripnesia.mobile.data.dummy.DestinationData
+import com.tripnesia.mobile.ui.theme.blueDark
 import com.tripnesia.mobile.ui.components.BottomNavItem
-import com.tripnesia.mobile.ui.DestinationScreen
-
+import com.tripnesia.mobile.ui.ProfileScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -35,11 +33,10 @@ fun TripnesiaMainScreen() {
         BottomNavItem("Home", Icons.Filled.Home),
         BottomNavItem("Event", Icons.Filled.CalendarMonth),
         BottomNavItem("Destinasi", Icons.Filled.LocationOn),
-        BottomNavItem("Setting", Icons.Filled.Settings)
+        BottomNavItem("Profile", Icons.Filled.Person) // Ganti 'Setting' menjadi 'Profile'
     )
 
     val navController = rememberNavController()
-
 
     Scaffold(
         bottomBar = {
@@ -68,7 +65,7 @@ fun TripnesiaMainScreen() {
                 0 -> HomeScreen()
                 1 -> EventScreen()
                 2 -> NavigationDestination(navController = navController)
-                3 -> SettingScreen()
+                3 -> ProfileScreen() // Panggil ProfileScreen
             }
         }
     }
