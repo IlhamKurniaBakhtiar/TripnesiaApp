@@ -43,6 +43,8 @@ android {
 }
 
 dependencies {
+    implementation("androidx.compose.foundation:foundation:1.4.0")// Atau versi terbaru yang tersedia
+    implementation("androidx.compose.animation:animation:1.4.0")
     implementation("io.coil-kt:coil-compose:2.1.0")
     implementation("androidx.compose.material:material-icons-extended:1.4.0")
     implementation("androidx.core:core-ktx:1.13.1") // Versi bisa berbeda
