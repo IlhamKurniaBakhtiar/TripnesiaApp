@@ -40,6 +40,7 @@ android {
 }
 
 dependencies {
+    implementation("io.coil-kt:coil-compose:2.1.0")
     implementation("androidx.compose.material:material-icons-extended:1.4.0")
     implementation("androidx.core:core-ktx:1.13.1") // Versi bisa berbeda
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.0") // Versi bisa berbeda
