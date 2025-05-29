@@ -1,7 +1,6 @@
 // TripnesiaMainScreen.kt
 package com.tripnesia.mobile.ui
 
-import DestinationScreen
 import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.layout.*
@@ -15,8 +14,10 @@ import androidx.compose.ui.platform.LocalContext
 import com.tripnesia.mobile.ui.theme.blueDark
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.compose.ui.Modifier
+import androidx.navigation.compose.rememberNavController
 import com.tripnesia.mobile.data.dummy.DestinationData
 import com.tripnesia.mobile.ui.components.BottomNavItem
+import com.tripnesia.mobile.ui.DestinationScreen
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -37,6 +38,9 @@ fun TripnesiaMainScreen() {
         BottomNavItem("Destinasi", Icons.Filled.LocationOn),
         BottomNavItem("Setting", Icons.Filled.Settings)
     )
+
+    val navController = rememberNavController()
+
 
     Scaffold(
         bottomBar = {
@@ -61,10 +65,11 @@ fun TripnesiaMainScreen() {
         }
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
+            NavigationDestination(navController = navController)
             when (selectedItemIndex) {
                 0 -> HomeScreen()
                 1 -> EventScreen()
-                2 -> DestinationScreen(destinations = DestinationData.destinations)
+                2 -> NavigationDestination(navController = navController)
                 3 -> SettingScreen()
             }
         }
