@@ -65,7 +65,7 @@ fun TripnesiaMainScreen() {
                 0 -> HomeScreen()
                 1 -> EventScreen()
                 2 -> NavigationDestination(navController = navController)
-                3 -> ProfileScreen() // Panggil ProfileScreen
+                3 -> ProfileScreen(context) // Kirimkan context ke ProfileScreen
             }
         }
     }

@@ -1,6 +1,8 @@
 package com.tripnesia.mobile.ui
 
+import android.content.Context
 import android.net.Uri
+import android.content.SharedPreferences
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -18,14 +20,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.layout.ContentScale
-
 import coil.compose.rememberImagePainter
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfileScreen() {
-    var name by remember { mutableStateOf(TextFieldValue("John Doe")) }
-    var email by remember { mutableStateOf(TextFieldValue("johndoe@example.com")) }
+fun ProfileScreen(context: Context) {
+    // SharedPreferences
+    val sharedPreferences: SharedPreferences = context.getSharedPreferences("ProfileData", Context.MODE_PRIVATE)
+    var name by remember { mutableStateOf(TextFieldValue(sharedPreferences.getString("name", "") ?: "")) }
+    var email by remember { mutableStateOf(TextFieldValue(sharedPreferences.getString("email", "") ?: "")) }
     var profileImageUri by remember { mutableStateOf<Uri?>(null) }
 
     // Registering the gallery activity result launcher
@@ -87,7 +90,8 @@ fun ProfileScreen() {
         OutlinedTextField(
             value = name,
             onValueChange = { name = it },
-            label = { Text("Name", color = primaryColor) },
+            label = null,  // Tidak ada label
+            placeholder = { Text("Enter your name", color = primaryColor.copy(alpha = 0.7f)) }, // Tambahkan placeholder
             modifier = Modifier.fillMaxWidth(),
             colors = TextFieldDefaults.outlinedTextFieldColors(
                 focusedBorderColor = primaryColor,
@@ -102,7 +106,8 @@ fun ProfileScreen() {
         OutlinedTextField(
             value = email,
             onValueChange = { email = it },
-            label = { Text("Email", color = primaryColor) },
+            label = null,  // Tidak ada label
+            placeholder = { Text("Enter your email", color = primaryColor.copy(alpha = 0.7f)) }, // Tambahkan placeholder
             modifier = Modifier.fillMaxWidth(),
             colors = TextFieldDefaults.outlinedTextFieldColors(
                 focusedBorderColor = primaryColor,
@@ -115,7 +120,14 @@ fun ProfileScreen() {
 
         // Save Button
         Button(
-            onClick = { /* Save the changes to profile info */ },
+            onClick = {
+                // Save the changes to profile info
+                with(sharedPreferences.edit()) {
+                    putString("name", name.text)
+                    putString("email", email.text)
+                    apply()
+                }
+            },
             modifier = Modifier.fillMaxWidth(),
             colors = ButtonDefaults.buttonColors(containerColor = primaryColor)
         ) {
