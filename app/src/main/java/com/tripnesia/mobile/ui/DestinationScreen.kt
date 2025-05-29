@@ -1,5 +1,8 @@
+package com.tripnesia.mobile.ui
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -18,9 +21,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.rememberNavController
 import com.tripnesia.mobile.data.dummy.DestinationData
 import com.tripnesia.mobile.data.model.Destination
 import com.tripnesia.mobile.R
+import com.tripnesia.mobile.ui.NavigationDestination
 
 @Composable
 fun HeaderDestinasi() {
@@ -74,11 +79,16 @@ fun HeaderDestinasi() {
 }
 
 @Composable
-fun DestinationCard(destination: Destination, modifier: Modifier = Modifier) {
+fun DestinationCard(
+    destination: Destination,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit
+) {
     Card(
         modifier = modifier
             .padding(4.dp)
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .clickable { onClick() },
         elevation = CardDefaults.cardElevation(4.dp),
         shape = RoundedCornerShape(16.dp)
     ) {
@@ -109,7 +119,10 @@ fun DestinationCard(destination: Destination, modifier: Modifier = Modifier) {
 
 // Grid untuk menampilkan semua destinasi
 @Composable
-fun DestinationScreen(destinations: List<Destination>) {
+fun DestinationScreen(
+    destinations: List<Destination>,
+    onDestinationClick: (Destination) -> Unit
+) {
     LazyColumn(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -150,7 +163,11 @@ fun DestinationScreen(destinations: List<Destination>) {
                     userScrollEnabled = false
                 ) {
                     items(destinations) { destination ->
-                        DestinationCard(destination = destination)
+                        DestinationCard(
+                            destination = destination,
+                            onClick = { onDestinationClick(destination) }
+                        )
+
                     }
                 }
             }
@@ -170,9 +187,8 @@ fun DestinationScreen(destinations: List<Destination>) {
 @Composable
 fun DestinationScreenPreview() {
     MaterialTheme {
-        Surface(modifier = Modifier.fillMaxSize()) {
-            DestinationScreen(destinations = DestinationData.destinations)
-        }
+        val navController = rememberNavController()
+        NavigationDestination(navController = navController)
     }
 }
 
