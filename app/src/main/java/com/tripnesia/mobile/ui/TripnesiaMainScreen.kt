@@ -29,6 +29,7 @@ fun TripnesiaMainScreen() {
     // Mengatur status bar untuk Android M ke atas
     val window = (context as? Activity)?.window
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
         window?.statusBarColor = Color(0xFF003366).toArgb()
         window?.let { WindowInsetsControllerCompat(it, it.decorView).isAppearanceLightStatusBars = false }
     }
