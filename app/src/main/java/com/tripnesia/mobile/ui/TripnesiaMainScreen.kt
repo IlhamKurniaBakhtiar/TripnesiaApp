@@ -19,7 +19,6 @@ import com.tripnesia.mobile.viewmodel.ProfileViewModel
 import com.tripnesia.mobile.viewmodel.ProfileViewModelFactory// Impor ProfileViewModel dari folder viewmodel
 import androidx.lifecycle.viewmodel.compose.viewModel
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TripnesiaMainScreen() {
