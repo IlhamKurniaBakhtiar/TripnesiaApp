@@ -3,8 +3,17 @@
   <component name="deploymentTargetSelector">
     <selectionStates>
       <SelectionState runConfigName="TripnesiaMobile.app">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
+      <option name="selectionMode" value="DROPDOWN" />
+      <DropdownSelection timestamp="2025-05-28T16:00:38.251066200Z">
+        <Target type="DEFAULT_BOOT">
+          <handle>
+            <DeviceId pluginId="PhysicalDevice" identifier="serial-9b3df8e6" />
+          </handle>
+        </Target>
+      </DropdownSelection>
+      <DialogSelection />
+    </SelectionState>
+
     </selectionStates>
   </component>
 </project>
