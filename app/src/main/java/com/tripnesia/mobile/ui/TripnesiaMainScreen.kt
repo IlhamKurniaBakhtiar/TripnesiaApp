@@ -1,7 +1,7 @@
 package com.tripnesia.mobile.ui
 
-import android.app.Activity
 import android.os.Build
+import android.app.Activity
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -16,16 +16,19 @@ import androidx.navigation.compose.rememberNavController
 import com.tripnesia.mobile.ui.theme.blueDark
 import com.tripnesia.mobile.ui.components.BottomNavItem
 import com.tripnesia.mobile.ui.ProfileScreen
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TripnesiaMainScreen() {
     val context = LocalContext.current
-    val window = (context as Activity).window
+    val viewModel: ProfileViewModel = viewModel(factory = ProfileViewModelFactory(context)) // Mendapatkan ViewModel dari factory
 
+    // Mengatur status bar untuk Android M ke atas
+    val window = (context as? Activity)?.window
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-        window.statusBarColor = Color(0xFF003366).toArgb()
-        WindowInsetsControllerCompat(window, window.decorView).isAppearanceLightStatusBars = false
+        window?.statusBarColor = Color(0xFF003366).toArgb()
+        window?.let { WindowInsetsControllerCompat(it, it.decorView).isAppearanceLightStatusBars = false }
     }
 
     var selectedItemIndex by remember { mutableStateOf(0) }
@@ -65,7 +68,7 @@ fun TripnesiaMainScreen() {
                 0 -> HomeScreen()
                 1 -> EventScreen()
                 2 -> NavigationDestination(navController = navController)
-                3 -> ProfileScreen(context) // Kirimkan context ke ProfileScreen
+                3 -> ProfileScreen(viewModel = viewModel)  // Kirimkan viewModel ke ProfileScreen
             }
         }
     }
