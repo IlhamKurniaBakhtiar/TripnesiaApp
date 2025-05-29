@@ -19,18 +19,20 @@ import androidx.compose.ui.layout.ContentScale
 import coil.compose.rememberAsyncImagePainter
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.ui.platform.LocalContext
+import com.tripnesia.mobile.viewmodel.ProfileViewModel
+import com.tripnesia.mobile.viewmodel.ProfileViewModelFactory
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(viewModel: ProfileViewModel) {
-    // Mengambil data dari ViewModel
     val name by remember { viewModel.name }
     val email by remember { viewModel.email }
     val profileImageUri by remember { viewModel.profileImageUri }
 
     val getImage = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         uri?.let {
-            viewModel.updateProfileImage(it)
+            viewModel.updateProfileImage(it)  // Memperbarui gambar profil dan menyimpannya ke SharedPreferences
         }
     }
 
@@ -118,11 +120,4 @@ fun ProfileScreen(viewModel: ProfileViewModel) {
             Text("Save Changes", color = Color.White)
         }
     }
-}
-
-@Composable
-fun ProfileScreenContainer() {
-    val context = LocalContext.current
-    val viewModel: ProfileViewModel = viewModel(factory = ProfileViewModelFactory(context))
-    ProfileScreen(viewModel = viewModel)
 }

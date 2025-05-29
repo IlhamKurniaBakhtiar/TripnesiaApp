@@ -15,14 +15,16 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import com.tripnesia.mobile.ui.theme.blueDark
 import com.tripnesia.mobile.ui.components.BottomNavItem
-import com.tripnesia.mobile.ui.ProfileScreen
+import com.tripnesia.mobile.viewmodel.ProfileViewModel
+import com.tripnesia.mobile.viewmodel.ProfileViewModelFactory// Impor ProfileViewModel dari folder viewmodel
 import androidx.lifecycle.viewmodel.compose.viewModel
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TripnesiaMainScreen() {
     val context = LocalContext.current
-    val viewModel: ProfileViewModel = viewModel(factory = ProfileViewModelFactory(context)) // Mendapatkan ViewModel dari factory
+    val viewModel: ProfileViewModel = viewModel(factory = ProfileViewModelFactory(context))  // Mendapatkan ViewModel dari factory
 
     // Mengatur status bar untuk Android M ke atas
     val window = (context as? Activity)?.window
@@ -68,7 +70,7 @@ fun TripnesiaMainScreen() {
                 0 -> HomeScreen()
                 1 -> EventScreen()
                 2 -> NavigationDestination(navController = navController)
-                3 -> ProfileScreen(viewModel = viewModel)  // Kirimkan viewModel ke ProfileScreen
+                3 -> ProfileScreen(viewModel = viewModel)  // Kirimkan ViewModel ke ProfileScreen
             }
         }
     }

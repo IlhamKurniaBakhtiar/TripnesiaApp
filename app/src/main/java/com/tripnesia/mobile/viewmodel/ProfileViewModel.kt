@@ -1,4 +1,4 @@
-package com.tripnesia.mobile.ui
+package com.tripnesia.mobile.viewmodel
 
 import android.content.Context
 import android.net.Uri
