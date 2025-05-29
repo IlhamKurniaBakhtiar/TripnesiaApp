@@ -8,7 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.tripnesia.mobile.data.dummy.DestinationData
 import com.tripnesia.mobile.data.model.Destination
-import com.tripnesia.mobile.ui.DestinationDetailScreen
+import com.tripnesia.mobile.ui.component.DestinationDetailScreen
 import com.tripnesia.mobile.ui.DestinationScreen
 import com.tripnesia.mobile.viewmodel.DestinationViewModel
 
