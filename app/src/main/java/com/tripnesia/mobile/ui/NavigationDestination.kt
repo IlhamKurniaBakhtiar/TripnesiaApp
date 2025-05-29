@@ -1,6 +1,7 @@
 package com.tripnesia.mobile.ui
 
 import androidx.compose.runtime.Composable
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -9,13 +10,15 @@ import com.tripnesia.mobile.data.dummy.DestinationData
 import com.tripnesia.mobile.data.model.Destination
 import com.tripnesia.mobile.ui.DestinationDetailScreen
 import com.tripnesia.mobile.ui.DestinationScreen
+import com.tripnesia.mobile.viewmodel.DestinationViewModel
 
 @Composable
 fun NavigationDestination(navController: NavHostController) {
     NavHost(navController = navController, startDestination = "destination") {
         composable("destination") {
+            val viewModel: DestinationViewModel = viewModel()
             DestinationScreen(
-                destinations = DestinationData.destinations,
+                viewModel = viewModel,
                 onDestinationClick = { destination ->
                     navController.currentBackStackEntry
                         ?.savedStateHandle

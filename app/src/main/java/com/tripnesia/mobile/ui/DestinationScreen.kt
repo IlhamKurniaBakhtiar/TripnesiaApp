@@ -11,6 +11,7 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -21,11 +22,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import com.tripnesia.mobile.data.dummy.DestinationData
 import com.tripnesia.mobile.data.model.Destination
 import com.tripnesia.mobile.R
 import com.tripnesia.mobile.ui.NavigationDestination
+import com.tripnesia.mobile.viewmodel.DestinationViewModel
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+
 
 @Composable
 fun HeaderDestinasi() {
@@ -90,7 +96,9 @@ fun DestinationCard(
             .fillMaxWidth()
             .clickable { onClick() },
         elevation = CardDefaults.cardElevation(4.dp),
-        shape = RoundedCornerShape(16.dp)
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = Color.White)
     ) {
         Column {
             Image(
@@ -107,7 +115,10 @@ fun DestinationCard(
                 modifier = Modifier.padding(start = 8.dp, top = 8.dp, end = 8.dp)
             )
             Text(
-                text = destination.description,
+                text = if (destination.description.length > 50)
+                    destination.description.take(50) + "..."
+                    else
+                        destination.description,
                 style = MaterialTheme.typography.bodySmall,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
@@ -120,9 +131,12 @@ fun DestinationCard(
 // Grid untuk menampilkan semua destinasi
 @Composable
 fun DestinationScreen(
-    destinations: List<Destination>,
-    onDestinationClick: (Destination) -> Unit
+    onDestinationClick: (Destination) -> Unit,
+    viewModel: DestinationViewModel = viewModel()
 ) {
+    val destinations by viewModel.destinations.collectAsState()
+
+
     LazyColumn(
         modifier = Modifier.fillMaxSize()
     ) {
