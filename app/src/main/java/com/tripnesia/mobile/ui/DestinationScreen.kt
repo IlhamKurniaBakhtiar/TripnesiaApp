@@ -33,6 +33,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 
 
+
+
 @Composable
 fun HeaderDestinasi() {
     Box(
@@ -122,6 +124,8 @@ fun DestinationCard(
         }
     }
 }
+
+
 @Composable
 fun DestinationScreen(
     onDestinationClick: (Destination) -> Unit,
@@ -143,7 +147,7 @@ fun DestinationScreen(
 
         item {
             Text(
-                text = "Rekomendasi wisata terbaik untuk kamu 🍃",
+                text = "Rekomendasi wisata terbaik untuk kamu",
                 style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
                 modifier = Modifier
                     .padding(start = 16.dp, top = 8.dp, bottom = 8.dp),

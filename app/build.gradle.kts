@@ -44,7 +44,8 @@ android {
 }
 
 dependencies {
-
+    implementation("io.coil-kt:coil-compose:2.4.0")
+    implementation("com.google.android.gms:play-services-maps:18.1.0")
     implementation("com.google.firebase:firebase-database:21.0.0")
     implementation("androidx.compose.foundation:foundation:1.4.0")// Atau versi terbaru yang tersedia
     implementation("androidx.compose.animation:animation:1.4.0")
