@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.google.gms.google.services)
 }
 
 android {
@@ -43,6 +44,8 @@ android {
 }
 
 dependencies {
+
+    implementation("com.google.firebase:firebase-database:21.0.0")
     implementation("androidx.compose.foundation:foundation:1.4.0")// Atau versi terbaru yang tersedia
     implementation("androidx.compose.animation:animation:1.4.0")
     implementation("io.coil-kt:coil-compose:2.1.0")
@@ -56,7 +59,8 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
     implementation("androidx.compose.material:material-icons-core") // Untuk ikon dasar
-    implementation("androidx.compose.material:material-icons-extended") // Untuk ikon tambahan
+    implementation("androidx.compose.material:material-icons-extended")
+    implementation(libs.firebase.database)
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -104,4 +108,7 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
 }
+
+apply(plugin = "com.google.gms.google-services")

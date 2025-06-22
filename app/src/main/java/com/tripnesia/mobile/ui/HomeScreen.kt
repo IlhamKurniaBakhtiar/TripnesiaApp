@@ -1,4 +1,3 @@
-// HomeScreenContent.kt
 package com.tripnesia.mobile.ui
 
 import androidx.compose.foundation.Image
