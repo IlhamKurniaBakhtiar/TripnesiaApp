@@ -40,22 +40,17 @@ fun HeaderDestinasi() {
             .fillMaxWidth()
             .height(150.dp)
     ) {
-        // 1. Gambar background
         Image(
             painter = painterResource(id = R.drawable.kuta),
             contentDescription = "Header Background",
             contentScale = ContentScale.Crop,
             modifier = Modifier.matchParentSize()
         )
-
-        // 2. Layer hitam transparan
         Box(
             modifier = Modifier
                 .matchParentSize()
-                .background(Color.Black.copy(alpha = 0.4f)) // alpha = 40% transparan
+                .background(Color.Black.copy(alpha = 0.4f))
         )
-
-        // 3. Teks paling atas
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -127,8 +122,6 @@ fun DestinationCard(
         }
     }
 }
-
-// Grid untuk menampilkan semua destinasi
 @Composable
 fun DestinationScreen(
     onDestinationClick: (Destination) -> Unit,
@@ -140,7 +133,6 @@ fun DestinationScreen(
     LazyColumn(
         modifier = Modifier.fillMaxSize()
     ) {
-        // Header tampil penuh tanpa padding
         item {
             HeaderDestinasi()
         }
@@ -164,9 +156,8 @@ fun DestinationScreen(
             Spacer(modifier = Modifier.height(16.dp))
         }
 
-        // Grid dengan padding horizontal
         item {
-            Box(modifier = Modifier.padding(horizontal = 12.dp)) { // padding khusus grid
+            Box(modifier = Modifier.padding(horizontal = 12.dp)) {
                 LazyVerticalGrid(
                     columns = GridCells.Fixed(2),
                     modifier = Modifier
@@ -191,12 +182,11 @@ fun DestinationScreen(
 
 
 
-// Preview dengan data dummy
 @Preview(
     showBackground = true,
     name = "Destinasi Full Preview",
-    widthDp = 400, // atau 360 sesuai target screen
-    heightDp = 800 // cukup besar biar scroll kelihatan
+    widthDp = 400,
+    heightDp = 800
 )
 @Composable
 fun DestinationScreenPreview() {

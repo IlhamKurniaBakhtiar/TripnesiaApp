@@ -11,10 +11,12 @@ import androidx.compose.runtime.*
 import com.tripnesia.mobile.ui.TripnesiaMainScreen
 import com.tripnesia.mobile.ui.SplashScreen
 import com.tripnesia.mobile.ui.theme.TripnesiaAppTheme
+import com.google.firebase.FirebaseApp
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        FirebaseApp.initializeApp(this)
 
         setContent {
             TripnesiaAppTheme {
