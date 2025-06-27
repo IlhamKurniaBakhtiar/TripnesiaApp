@@ -22,6 +22,7 @@ import androidx.compose.ui.platform.LocalContext
 import android.content.Intent
 import android.net.Uri
 import android.util.Log
+import androidx.compose.runtime.remember
 import coil.compose.AsyncImage
 import com.tripnesia.mobile.ui.theme.primaryBlue
 
@@ -30,6 +31,9 @@ import com.tripnesia.mobile.ui.theme.primaryBlue
 fun DestinationDetailScreen(destination: Destination, onBack: () -> Unit = {}) {
     val scrollState = rememberScrollState()
     val context = LocalContext.current
+    val imageResId = remember(destination.imageUrl) {
+        context.resources.getIdentifier(destination.imageUrl, "drawable", context.packageName)
+    }
 
     Scaffold(
         topBar = {
@@ -54,12 +58,12 @@ fun DestinationDetailScreen(destination: Destination, onBack: () -> Unit = {}) {
         ) {
             // Destination Image
             Image(
-                painter = painterResource(id = destination.imageRes),
+                painter = painterResource(id = imageResId),
                 contentDescription = destination.title,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(240.dp)
-                    .clip(RoundedCornerShape(8.dp)), // Rounded corners for the image
+                    .clip(RoundedCornerShape(8.dp)),
                 contentScale = ContentScale.Crop
             )
 
