@@ -18,7 +18,9 @@ import com.tripnesia.mobile.ui.components.BottomNavItem
 import com.tripnesia.mobile.viewmodel.ProfileViewModel
 import com.tripnesia.mobile.viewmodel.ProfileViewModelFactory
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.tripnesia.mobile.ui.screen.paket.NavigationPackage
 import com.tripnesia.mobile.ui.theme.primaryBlue
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -72,7 +74,7 @@ fun TripnesiaMainScreen() {
                 0 -> HomeScreen()
                 1 -> EventScreen()
                 2 -> NavigationDestination(navController = navController)
-                3 -> NavigationDestination(navController = navController)
+                3 -> NavigationPackage(navController = navController)
                 4 -> ProfileScreen(viewModel = viewModel)
             }
         }

@@ -12,11 +12,13 @@ import com.tripnesia.mobile.ui.TripnesiaMainScreen
 import com.tripnesia.mobile.ui.SplashScreen
 import com.tripnesia.mobile.ui.theme.TripnesiaAppTheme
 import com.google.firebase.FirebaseApp
+import com.tripnesia.mobile.Database.uploadDataToFirebase
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         FirebaseApp.initializeApp(this)
+        uploadDataToFirebase()
 
         setContent {
             TripnesiaAppTheme {
