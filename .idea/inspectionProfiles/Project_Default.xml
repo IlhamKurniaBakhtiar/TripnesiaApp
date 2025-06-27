@@ -53,9 +53,9 @@
       <option name="composableFile" value="true" />
       <option name="previewFile" value="true" />
 <<<<<<< HEAD
-=======
 
->>>>>>> origin/main
+=======
+>>>>>>> main
     </inspection_tool>
     <inspection_tool class="PreviewPickerAnnotation" enabled="true" level="ERROR" enabled_by_default="true">
       <option name="composableFile" value="true" />

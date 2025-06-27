@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "229928915223",
+    "firebase_url": "https://tripnesia-df00a-default-rtdb.firebaseio.com",
+    "project_id": "tripnesia-df00a",
+    "storage_bucket": "tripnesia-df00a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:229928915223:android:9ea6df3cf020ff593f6752",
+        "android_client_info": {
+          "package_name": "com.tripnesia.mobile"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB5pG_9HuSLSYzc6J5yB_Lo2ZhGBiT4H7c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
