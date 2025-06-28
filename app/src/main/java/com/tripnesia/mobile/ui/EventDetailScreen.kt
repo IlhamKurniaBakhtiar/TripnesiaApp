@@ -36,6 +36,8 @@ fun EventDetailScreen(event: Event, onBack: () -> Unit) {
             contentDescription = event.title,
             modifier = Modifier
                 .fillMaxWidth()
+
+
                 .height(200.dp),
             contentScale = ContentScale.Crop
         )
