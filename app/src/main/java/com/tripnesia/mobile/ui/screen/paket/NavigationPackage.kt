@@ -1,6 +1,7 @@
 package com.tripnesia.mobile.ui.screen.paket
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -11,6 +12,8 @@ import com.tripnesia.mobile.data.model.TravelPackage
 import com.tripnesia.mobile.viewmodel.PackageViewModel
 import com.tripnesia.mobile.ui.payment.PaymentScreen
 import com.tripnesia.mobile.ui.LoginScreen
+import com.tripnesia.mobile.viewmodel.ProfileViewModel
+import com.tripnesia.mobile.viewmodel.ProfileViewModelFactory
 
 @Composable
 fun NavigationPackage(navController: NavHostController) {
@@ -35,10 +38,15 @@ fun NavigationPackage(navController: NavHostController) {
                 ?.get<TravelPackage>("package")
 
             if (travelPackage != null) {
+                val context = LocalContext.current
+                val profileViewModel: ProfileViewModel = viewModel(
+                    factory = ProfileViewModelFactory(context)
+                )
                 PackageDetailScreen(
                     travelPackage = travelPackage,
                     navController = navController,
-                    onBack = { navController.popBackStack() }
+                    onBack = { navController.popBackStack() },
+                    profileViewModel = profileViewModel
                 )
             }
         }
