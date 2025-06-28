@@ -1,2 +1,3 @@
-package com.tripnesia.mobile.ui.payment 
+package com.tripnesia.mobile.ui.payment
 
+annotation class TransactionResult

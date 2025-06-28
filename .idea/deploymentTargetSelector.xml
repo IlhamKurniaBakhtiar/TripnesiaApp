@@ -4,10 +4,10 @@
     <selectionStates>
       <SelectionState runConfigName="TripnesiaMobile.app">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2025-06-22T16:09:34.339714100Z">
+        <DropdownSelection timestamp="2025-06-28T07:16:03.220028900Z">
           <Target type="DEFAULT_BOOT">
             <handle>
-              <DeviceId pluginId="PhysicalDevice" identifier="serial=69f1442b0512" />
+              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\robby\.android\avd\Pixel_7.avd" />
             </handle>
           </Target>
         </DropdownSelection>
