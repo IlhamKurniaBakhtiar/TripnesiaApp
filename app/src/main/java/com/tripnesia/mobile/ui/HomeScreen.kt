@@ -1,41 +1,241 @@
 package com.tripnesia.mobile.ui
 
+import android.content.Intent
+import android.net.Uri
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Text
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.sp
-import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.tripnesia.mobile.R
+
+data class TeamMember(
+    val name: String,
+    val role: String,
+    @DrawableRes val imageRes: Int,
+    val linkedinUrl: String?,
+    val githubUrl: String?
+)
+
+val teamMembers = listOf(
+    TeamMember(
+        name = "Ilham Kurnia Bakhtiar",
+        role = "Project Manager",
+        imageRes = R.drawable.ilham_kurnia,
+        linkedinUrl = "https://www.linkedin.com/in/ilham-kurnia-bakhtiar-710a40326/",
+        githubUrl = "https://github.com/IlhamKurniaBakhtiar"
+    ),
+    TeamMember(
+        name = "Robby Septian Fajar",
+        role = "Programmer",
+        imageRes = R.drawable.robby_septian,
+        linkedinUrl = "https://www.linkedin.com/in/robby-septian-fajar-2b7b4b253/",
+        githubUrl = "https://github.com/robby-sf"
+    ),
+    TeamMember(
+        name = "Shofi Zahrotul Aulia",
+        role = "Requirement Analyst",
+        imageRes = R.drawable.shofi_zahrotul,
+        linkedinUrl = "https://www.linkedin.com/in/shofi-zahrotul-aulia-870555320",
+        githubUrl = "https://github.com/shfzhlaa"
+    )
+)
 
 @Composable
 fun HomeScreen(modifier: Modifier = Modifier) {
-    Box(modifier = modifier.fillMaxSize()) {
-        Image(
-            painter = painterResource(id = R.drawable.background_image),
-            contentDescription = "Background Pegunungan",
-            modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.Crop
-        )
-        Column(
+    val configuration = LocalConfiguration.current
+    val screenHeight = configuration.screenHeightDp.dp
+
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+    ) {
+        Box(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+                .fillMaxWidth()
+                .height(screenHeight),
+            contentAlignment = Alignment.Center
         ) {
+            Image(
+                painter = painterResource(id = R.drawable.background_image),
+                contentDescription = "Background Pegunungan",
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop
+            )
             Text(
                 text = "Discover Your Journey",
-                fontSize = 30.sp,
+                fontSize = 32.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color.White
+                color = Color.White,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(horizontal = 16.dp)
             )
+        }
+
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(24.dp)
+        ) {
+            Text(
+                text = "Tripnesia adalah platform pariwisata terbesar di Indonesia",
+                style = MaterialTheme.typography.headlineSmall,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                text = "Tripnesia merupakan sebuah platform informasi sekaligus perjalanan yang menyediakan berbagai destinasi wisata alam yang ada di Indonesia.",
+                style = MaterialTheme.typography.bodyMedium,
+                textAlign = TextAlign.Center,
+                color = Color.Gray
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = "Kami percaya bahwa keindahan alam Indonesia ada untuk dinikmati seluruh orang, melalui platform Tripnesia kami menyediakan berbagai informasi mengenai berbagai destinasi untuk semua orang.",
+                style = MaterialTheme.typography.bodyMedium,
+                textAlign = TextAlign.Center,
+                color = Color.Gray
+            )
+        }
+
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 32.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "Meet Our Team",
+                style = MaterialTheme.typography.headlineSmall,
+                fontWeight = FontWeight.Bold
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = "Kami adalah tim profesional yang berdedikasi untuk memberikan yang terbaik.",
+                style = MaterialTheme.typography.bodyMedium,
+                textAlign = TextAlign.Center,
+                color = Color.Gray,
+                modifier = Modifier.padding(horizontal = 24.dp)
+            )
+            Spacer(modifier = Modifier.height(24.dp))
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                horizontalArrangement = Arrangement.SpaceAround,
+                verticalAlignment = Alignment.Top
+            ) {
+                teamMembers.forEach { member ->
+                    TeamMemberCard(member = member)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun TeamMemberCard(member: TeamMember, modifier: Modifier = Modifier) {
+    val context = LocalContext.current
+
+    Column(
+        modifier = modifier
+            .width(110.dp)
+            .shadow(elevation = 4.dp, shape = RoundedCornerShape(12.dp))
+            .clip(RoundedCornerShape(12.dp))
+            .background(Color.White)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(12.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Image(
+                painter = painterResource(id = member.imageRes),
+                contentDescription = "Foto ${member.name}",
+                modifier = Modifier
+                    .size(80.dp)
+                    .clip(CircleShape),
+                contentScale = ContentScale.Crop
+            )
+
+            Spacer(modifier = Modifier.height(12.dp))
+            Text(
+                text = member.name,
+                fontWeight = FontWeight.Bold,
+                fontSize = 12.sp,
+                textAlign = TextAlign.Center,
+                maxLines = 2,
+                minLines = 2
+            )
+            Text(
+                text = member.role,
+                fontSize = 10.sp,
+                color = Color.Gray,
+                textAlign = TextAlign.Center
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                if (!member.linkedinUrl.isNullOrBlank()) {
+                    IconButton(
+                        onClick = {
+                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(member.linkedinUrl))
+                            context.startActivity(intent)
+                        },
+                        modifier = Modifier.size(24.dp)
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.logo_linkedin),
+                            contentDescription = "LinkedIn",
+                            tint = Color.Unspecified
+                        )
+                    }
+                }
+
+                if (!member.githubUrl.isNullOrBlank()) {
+                    if(!member.linkedinUrl.isNullOrBlank()) {
+                        Spacer(modifier = Modifier.width(16.dp))
+                    }
+                    IconButton(
+                        onClick = {
+                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(member.githubUrl))
+                            context.startActivity(intent)
+                        },
+                        modifier = Modifier.size(24.dp)
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.logo_github),
+                            contentDescription = "GitHub",
+                            tint = Color.Unspecified
+                        )
+                    }
+                }
+            }
         }
     }
 }

@@ -1,6 +1,3 @@
-// LOKASI: app/src/main/java/com/tripnesia/mobile/ui/LoginScreen.kt
-// KODE LENGKAP DAN FINAL
-
 package com.tripnesia.mobile.ui
 
 import androidx.compose.foundation.Image
@@ -28,7 +25,6 @@ import com.tripnesia.mobile.R
 import com.tripnesia.mobile.viewmodel.ProfileViewModel
 import kotlinx.coroutines.launch
 
-// Definisikan warna-warna kustom
 private val cardBackgroundColor = Color(0xFFF5F1E9)
 private val textFieldBackgroundColor = Color(0xFFE8E2D9)
 private val buttonColor = Color(0xFF1E6A6B)
@@ -46,36 +42,30 @@ fun LoginScreen(
     val isLoading by viewModel.isLoading
     val errorMessage by viewModel.errorMessage
 
-    // State untuk Snackbar
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val passwordResetSent by viewModel.passwordResetEmailSent
 
-    // Efek untuk membersihkan error message saat user mulai mengetik
     LaunchedEffect(email, password) {
         if (errorMessage != null) {
             viewModel.errorMessage.value = null
         }
     }
 
-    // Efek untuk menampilkan Snackbar jika email reset password berhasil dikirim
     LaunchedEffect(passwordResetSent) {
         if (passwordResetSent) {
             scope.launch {
                 snackbarHostState.showSnackbar("Link reset password telah dikirim ke email Anda.")
             }
-            // Reset state agar tidak muncul lagi saat layar recompose
             viewModel.passwordResetEmailSent.value = false
         }
     }
 
-    // Gunakan Scaffold untuk menampung SnackbarHost di posisi yang benar
     Scaffold(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         containerColor = Color.Transparent
     ) { paddingValues ->
         Box(modifier = Modifier.fillMaxSize().padding(paddingValues)) {
-            // Latar belakang gambar fullscreen
             Image(
                 painter = painterResource(id = R.drawable.login_background),
                 contentDescription = "Background",
@@ -83,7 +73,6 @@ fun LoginScreen(
                 contentScale = ContentScale.Crop
             )
 
-            // Kartu Form Login di tengah
             Box(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
@@ -122,7 +111,6 @@ fun LoginScreen(
 
                     Spacer(modifier = Modifier.height(24.dp))
 
-                    // Custom TextField untuk Email
                     TextField(
                         value = email,
                         onValueChange = { email = it },
@@ -145,7 +133,6 @@ fun LoginScreen(
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    // Custom TextField untuk Password
                     TextField(
                         value = password,
                         onValueChange = { password = it },
