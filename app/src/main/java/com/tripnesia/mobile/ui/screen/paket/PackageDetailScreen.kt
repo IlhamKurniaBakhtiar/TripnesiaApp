@@ -49,9 +49,6 @@ fun PackageDetailScreen(
 ) {
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
-    val user = Firebase.auth.currentUser
-    val userName = user?.displayName ?: "Pengguna"
-    val userEmail = user?.email ?: "pengguna@example.com"
     val imageResId = remember(travelPackage.imageUrl) {
         context.resources.getIdentifier(travelPackage.imageUrl, "drawable", context.packageName)
     }
@@ -133,7 +130,16 @@ fun PackageDetailScreen(
 
                 // Tombol Pemesanan
                 Button(
-                    onClick = {
+                    onClick = onClick@{
+                        val user = Firebase.auth.currentUser
+                        if (user == null) {
+                            Toast.makeText(context, "Silakan login terlebih dahulu melalui menu Profil", Toast.LENGTH_SHORT).show()
+                            return@onClick
+                        }
+
+                        val userName = user.displayName ?: user.email?.substringBefore("@") ?: "Pengguna"
+                        val userEmail = user.email ?: "user@example.com"
+
                         coroutineScope.launch {
                             try {
                                 val snapToken = getSnapToken(
@@ -145,26 +151,26 @@ fun PackageDetailScreen(
 
                                 if (snapToken != null) {
                                     val snapUrl = "https://app.sandbox.midtrans.com/snap/v2/vtweb/$snapToken"
-                                    Toast.makeText(context, "Token OK", Toast.LENGTH_SHORT).show()
                                     navController.navigate("payment_screen/${URLEncoder.encode(snapUrl, "UTF-8")}")
                                 } else {
-                                    Toast.makeText(context, "Gagal dapat Snap Token", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(context, "Gagal mendapatkan Snap Token", Toast.LENGTH_SHORT).show()
                                 }
                             } catch (e: Exception) {
                                 e.printStackTrace()
-                                Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_LONG).show()
+                                Toast.makeText(context, "Terjadi error: ${e.message}", Toast.LENGTH_LONG).show()
                             }
                         }
                     },
                     modifier = Modifier.fillMaxWidth(),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFF7F6AFF), // soft purple / lavender
+                        containerColor = Color(0xFF7F6AFF),
                         contentColor = Color.White
                     ),
                     shape = RoundedCornerShape(12.dp)
                 ) {
                     Text(text = "Pesan Sekarang")
                 }
+
             }
         }
     }
