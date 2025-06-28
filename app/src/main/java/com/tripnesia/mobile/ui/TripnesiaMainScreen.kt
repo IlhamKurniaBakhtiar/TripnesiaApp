@@ -1,26 +1,29 @@
 package com.tripnesia.mobile.ui
 
-import android.os.Build
 import android.app.Activity
-import androidx.compose.foundation.layout.*
+import android.os.Build
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.filled.CardTravel
+import androidx.compose.material.icons.filled.CalendarMonth
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Map
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.view.WindowInsetsControllerCompat
-import androidx.compose.ui.Modifier
-import androidx.navigation.compose.rememberNavController
-import com.tripnesia.mobile.ui.theme.blueDark
-import com.tripnesia.mobile.ui.components.BottomNavItem
-import com.tripnesia.mobile.viewmodel.ProfileViewModel
-import com.tripnesia.mobile.viewmodel.ProfileViewModelFactory
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.compose.rememberNavController
+import com.tripnesia.mobile.ui.components.BottomNavItem
 import com.tripnesia.mobile.ui.screen.paket.NavigationPackage
 import com.tripnesia.mobile.ui.theme.primaryBlue
-
+import com.tripnesia.mobile.viewmodel.ProfileViewModel
+import com.tripnesia.mobile.viewmodel.ProfileViewModelFactory
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -30,7 +33,6 @@ fun TripnesiaMainScreen() {
 
     val window = (context as? Activity)?.window
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-
         window?.statusBarColor = Color(0xFF0C1222).toArgb()
         window?.let { WindowInsetsControllerCompat(it, it.decorView).isAppearanceLightStatusBars = false }
     }
@@ -75,7 +77,7 @@ fun TripnesiaMainScreen() {
                 1 -> EventScreen()
                 2 -> NavigationDestination(navController = navController)
                 3 -> NavigationPackage(navController = navController)
-                4 -> ProfileScreen(viewModel = viewModel)
+                4 -> AuthNavigation(viewModel = viewModel)
             }
         }
     }
