@@ -1,6 +1,3 @@
-// LOKASI: app/src/main/java/com/tripnesia/mobile/ui/ForgotPasswordScreen.kt
-// KODE LENGKAP DENGAN DESAIN YANG DIREVISI
-
 package com.tripnesia.mobile.ui
 
 import androidx.compose.foundation.Image
@@ -26,7 +23,6 @@ import androidx.compose.ui.unit.sp
 import com.tripnesia.mobile.R
 import com.tripnesia.mobile.viewmodel.ProfileViewModel
 
-// Definisikan warna-warna kustom
 private val cardBackgroundColor = Color(0xFFF5F1E9)
 private val textFieldBackgroundColor = Color(0xFFE8E2D9)
 private val buttonColor = Color(0xFF1E6A6B)
@@ -43,7 +39,6 @@ fun ForgotPasswordScreen(
     val isLoading by viewModel.isLoading
     val errorMessage by viewModel.errorMessage
 
-    // Latar belakang gambar fullscreen
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
             painter = painterResource(id = R.drawable.login_background),
@@ -52,7 +47,6 @@ fun ForgotPasswordScreen(
             contentScale = ContentScale.Crop
         )
 
-        // Kartu Form di tengah
         Box(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
@@ -62,7 +56,7 @@ fun ForgotPasswordScreen(
                     .fillMaxWidth(0.85f)
                     .clip(RoundedCornerShape(16.dp))
                     .background(cardBackgroundColor)
-                    .padding(horizontal = 24.dp, vertical = 32.dp) // Beri padding vertikal lebih besar
+                    .padding(horizontal = 24.dp, vertical = 32.dp)
                     .verticalScroll(rememberScrollState()),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -73,14 +67,14 @@ fun ForgotPasswordScreen(
                     modifier = Modifier.height(40.dp)
                 )
 
-                Spacer(modifier = Modifier.height(24.dp)) // Spacer lebih besar
+                Spacer(modifier = Modifier.height(24.dp))
 
                 Text(
                     text = "Lupa Password Anda?",
-                    fontSize = 26.sp, // Ukuran font diperbesar
+                    fontSize = 26.sp,
                     fontWeight = FontWeight.Bold,
                     color = darkTextColor,
-                    textAlign = TextAlign.Center // Perataan di tengah
+                    textAlign = TextAlign.Center
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
@@ -89,17 +83,15 @@ fun ForgotPasswordScreen(
                     text = "Masukkan email Anda agar kami dapat mengirimkan tautan reset password.",
                     fontSize = 14.sp,
                     color = Color.Gray,
-                    textAlign = TextAlign.Center // Perataan di tengah
+                    textAlign = TextAlign.Center
                 )
 
-                Spacer(modifier = Modifier.height(32.dp)) // Spacer lebih besar
+                Spacer(modifier = Modifier.height(32.dp))
 
-                // TextField untuk Email
                 TextField(
                     value = email,
                     onValueChange = { email = it },
                     modifier = Modifier.fillMaxWidth(),
-                    // Label dihilangkan dari atas, menjadi placeholder
                     placeholder = { Text("Email (contoh: nama@email.com)") },
                     shape = RoundedCornerShape(8.dp),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
@@ -125,7 +117,7 @@ fun ForgotPasswordScreen(
                 Button(
                     onClick = {
                         viewModel.sendPasswordResetEmail(email)
-                        onEmailSent() // Kembali ke login setelah diklik
+                        onEmailSent()
                     },
                     modifier = Modifier
                         .fillMaxWidth()
