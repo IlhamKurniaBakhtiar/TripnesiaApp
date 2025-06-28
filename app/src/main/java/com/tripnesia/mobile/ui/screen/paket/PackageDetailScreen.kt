@@ -30,6 +30,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 import com.tripnesia.mobile.Database.getSnapToken
 import com.tripnesia.mobile.data.model.TravelPackage
 import com.tripnesia.mobile.ui.theme.primaryBlue
@@ -47,6 +49,9 @@ fun PackageDetailScreen(
 ) {
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
+    val user = Firebase.auth.currentUser
+    val userName = user?.displayName ?: "Pengguna"
+    val userEmail = user?.email ?: "pengguna@example.com"
     val imageResId = remember(travelPackage.imageUrl) {
         context.resources.getIdentifier(travelPackage.imageUrl, "drawable", context.packageName)
     }
@@ -134,8 +139,8 @@ fun PackageDetailScreen(
                                 val snapToken = getSnapToken(
                                     orderId = "ORDER-${System.currentTimeMillis()}",
                                     amount = travelPackage.price,
-                                    name = "Robby",
-                                    email = "robby@example.com"
+                                    name = userName,
+                                    email = userEmail
                                 )
 
                                 if (snapToken != null) {
