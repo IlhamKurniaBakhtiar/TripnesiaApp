@@ -73,12 +73,12 @@ fun TripnesiaMainScreen() {
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
             when (selectedItemIndex) {
-                0 -> HomeScreen()
-                1 -> EventScreen()
-                2 -> NavigationDestination(navController = navController)
-                3 -> NavigationPackage(navController = navController)
-                4 -> AuthNavigation(viewModel = viewModel)
-            }
+            0 -> HomeScreen()
+            1 -> EventScreen()
+            2 -> NavigationDestination(navController = navController)
+            3 -> NavigationPackage(navController = navController)
+            4 -> AuthNavigation(viewModel = viewModel)
+        }
         }
     }
 }

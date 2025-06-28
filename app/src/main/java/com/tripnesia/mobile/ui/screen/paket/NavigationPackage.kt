@@ -10,6 +10,7 @@ import androidx.navigation.navArgument
 import com.tripnesia.mobile.data.model.TravelPackage
 import com.tripnesia.mobile.viewmodel.PackageViewModel
 import com.tripnesia.mobile.ui.payment.PaymentScreen
+import com.tripnesia.mobile.ui.LoginScreen
 
 @Composable
 fun NavigationPackage(navController: NavHostController) {
