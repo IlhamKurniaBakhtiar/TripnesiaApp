@@ -6,18 +6,25 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.tripnesia.mobile.R
 import com.tripnesia.mobile.data.model.Event
 
 
 @Composable
 fun EventDetailScreen(event: Event, onBack: () -> Unit) {
     val scrollState = rememberScrollState()
+    val context = LocalContext.current
+    val imageResId = remember(event.imageName) {
+        context.resources.getIdentifier(event.imageName, "drawable", context.packageName)
+    }
 
     Column(
         modifier = Modifier
@@ -32,7 +39,7 @@ fun EventDetailScreen(event: Event, onBack: () -> Unit) {
         Spacer(modifier = Modifier.height(16.dp))
 
         Image(
-            painter = painterResource(id = event.imageResId),
+            painter = painterResource(id = imageResId),
             contentDescription = event.title,
             modifier = Modifier
                 .fillMaxWidth()

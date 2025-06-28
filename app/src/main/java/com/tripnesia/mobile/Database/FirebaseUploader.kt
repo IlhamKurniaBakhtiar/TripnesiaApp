@@ -5,6 +5,8 @@ import com.tripnesia.mobile.data.dummy.DestinationData
 import com.tripnesia.mobile.data.model.Destination
 import com.tripnesia.mobile.data.model.TravelPackage
 import com.tripnesia.mobile.data.dummy.TravelPackageData
+import com.tripnesia.mobile.data.dummy.sampleEvents
+
 fun uploadDataToFirebase() {
     val database = FirebaseDatabase.getInstance()
     val destinationRef = database.getReference("destinations")
@@ -44,15 +46,15 @@ fun uploadDataToFirebase() {
         packageRef.child(travelPackage.id).setValue(cleanedData)
     }
 
-//    sampleEvents.forEach { event ->
-//        val cleanedEvent = Event(
-//            id = event.id,
-//            title = event.title,
-//            date = event.date,
-//            kategori = event.kategori,
-//            imageName = "pesta_bali", // Sesuaikan
-//            description = event.description
-//        )
-//        eventRef.child(event.id.toString()).setValue(cleanedEvent)
-//    }
-}
+    sampleEvents.forEach { event ->
+        val cleanedEvent = com.tripnesia.mobile.data.model.Event(
+            id = event.id,
+            title = event.title,
+            date = event.date,
+            kategori = event.kategori,
+            imageName = event.imageName,
+            description = event.description
+        )
+        eventRef.child(event.id.toString()).setValue(cleanedEvent)
+    }
+    }
