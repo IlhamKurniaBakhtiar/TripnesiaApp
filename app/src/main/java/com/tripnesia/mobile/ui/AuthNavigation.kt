@@ -29,12 +29,9 @@ fun AuthNavigation(viewModel: ProfileViewModel) {
                 RegisterScreen(
                     viewModel = viewModel,
                     onRegistrationSuccess = {
-                        // Kembali ke halaman login setelah registrasi
                         navController.popBackStack()
                     },
-                    // Tambahkan aksi untuk tombol baru
                     onNavigateToLogin = {
-                        // Kembali ke halaman login jika tombol diklik
                         navController.popBackStack()
                     }
                 )

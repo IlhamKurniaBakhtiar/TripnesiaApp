@@ -1,3 +1,6 @@
+// LOKASI: app/src/main/java/com/tripnesia/mobile/ui/ProfileScreen.kt
+// KODE LENGKAP YANG DIBANGUN ULANG DAN STABIL
+
 package com.tripnesia.mobile.ui
 
 import android.net.Uri
@@ -8,6 +11,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -21,6 +25,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
@@ -33,17 +39,33 @@ import java.io.File
 fun ProfileScreen(viewModel: ProfileViewModel) {
     var isEditMode by remember { mutableStateOf(false) }
 
-    // State untuk menyimpan data asli sebelum diedit
+    // State untuk menyimpan data asli sebelum diedit (untuk fitur "Batal")
     val originalName = remember { mutableStateOf("") }
     val originalEmail = remember { mutableStateOf("") }
     val originalImagePath = remember { mutableStateOf<String?>(null) }
+    val originalPhoneNumber = remember { mutableStateOf("") }
 
+    // Ambil state pemicu dialog dari ViewModel
+    val needsReauth by viewModel.needsReauthentication
+
+    // Tampilkan dialog jika state-nya true
+    if (needsReauth) {
+        ReauthenticationDialog(
+            viewModel = viewModel,
+            onDismiss = { viewModel.needsReauthentication.value = false },
+            newName = viewModel.name.value,
+            newEmail = viewModel.email.value,
+            newPhoneNumber = viewModel.phoneNumber.value
+        )
+    }
+
+    // "Memotret" data asli saat akan masuk ke mode edit
     LaunchedEffect(isEditMode) {
-        if (!isEditMode) {
-            // Saat beralih ke mode lihat, simpan data terbaru dari ViewModel
+        if (isEditMode) {
             originalName.value = viewModel.name.value
             originalEmail.value = viewModel.email.value
             originalImagePath.value = viewModel.profileImagePath.value
+            originalPhoneNumber.value = viewModel.phoneNumber.value
         }
     }
 
@@ -61,14 +83,14 @@ fun ProfileScreen(viewModel: ProfileViewModel) {
                 navigationIcon = {
                     if (isEditMode) {
                         IconButton(onClick = {
-                            // Batalkan perubahan jika menekan tombol kembali
+                            // Kembalikan data ke kondisi asli jika dibatalkan
                             viewModel.name.value = originalName.value
                             viewModel.email.value = originalEmail.value
-                            viewModel.profileImagePath.value = originalImagePath.value
+                            viewModel.phoneNumber.value = originalPhoneNumber.value
                             viewModel.newProfileImageUri.value = null // Hapus preview gambar baru
                             isEditMode = false
                         }) {
-                            Icon(Icons.Filled.ArrowBack, contentDescription = "Back")
+                            Icon(Icons.Filled.ArrowBack, contentDescription = "Cancel Edit")
                         }
                     }
                 }
@@ -83,14 +105,12 @@ fun ProfileScreen(viewModel: ProfileViewModel) {
             if (isEditMode) {
                 EditProfileContent(
                     viewModel = viewModel,
-                    onSaveClicked = {
-                        isEditMode = false
-                    },
+                    onSaveClicked = { isEditMode = false },
                     onCancelClicked = {
-                        // Batalkan perubahan
+                        // Kembalikan data ke kondisi asli jika dibatalkan
                         viewModel.name.value = originalName.value
                         viewModel.email.value = originalEmail.value
-                        viewModel.profileImagePath.value = originalImagePath.value
+                        viewModel.phoneNumber.value = originalPhoneNumber.value
                         viewModel.newProfileImageUri.value = null
                         isEditMode = false
                     }
@@ -107,6 +127,7 @@ fun ViewProfileContent(viewModel: ProfileViewModel) {
     val name by remember { viewModel.name }
     val email by remember { viewModel.email }
     val imagePath by remember { viewModel.profileImagePath }
+    val phoneNumber by remember { viewModel.phoneNumber }
     val primaryColor = Color(0xFF003366)
 
     Column(
@@ -124,21 +145,23 @@ fun ViewProfileContent(viewModel: ProfileViewModel) {
                 .border(4.dp, primaryColor, CircleShape),
             contentAlignment = Alignment.Center
         ) {
-            // Cek jika path gambar tidak kosong
             if (!imagePath.isNullOrEmpty()) {
-                // Muat gambar dari path file lokal
                 Image(
                     painter = rememberAsyncImagePainter(model = File(imagePath!!)),
                     contentDescription = "Profile Image",
-                    modifier = Modifier.fillMaxSize().clip(CircleShape),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .clip(CircleShape),
                     contentScale = ContentScale.Crop
                 )
             } else {
-                // Tampilkan gambar default jika path kosong
                 Image(
                     painter = painterResource(id = R.drawable.profilekosong),
                     contentDescription = "Default Profile Image",
-                    modifier = Modifier.fillMaxSize().clip(CircleShape).padding(20.dp),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .clip(CircleShape)
+                        .padding(20.dp),
                     contentScale = ContentScale.Fit
                 )
             }
@@ -149,6 +172,8 @@ fun ViewProfileContent(viewModel: ProfileViewModel) {
         InfoRow(label = "Nama", value = name.ifEmpty { "Belum diatur" })
         Divider(modifier = Modifier.padding(vertical = 8.dp))
         InfoRow(label = "Email", value = email.ifEmpty { "Belum diatur" })
+        Divider(modifier = Modifier.padding(vertical = 8.dp))
+        InfoRow(label = "Nomor Telepon", value = phoneNumber.ifEmpty { "Nomor belum diisi" })
 
         Spacer(modifier = Modifier.weight(1f))
 
@@ -169,13 +194,12 @@ fun ViewProfileContent(viewModel: ProfileViewModel) {
 fun EditProfileContent(viewModel: ProfileViewModel, onSaveClicked: () -> Unit, onCancelClicked: () -> Unit) {
     val name = viewModel.name
     val email = viewModel.email
+    val phoneNumber = viewModel.phoneNumber
     val newImageUri by viewModel.newProfileImageUri
     val existingImagePath by viewModel.profileImagePath
 
     val getImage = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-        uri?.let {
-            viewModel.setNewProfileImage(it)
-        }
+        uri?.let { viewModel.setNewProfileImageUri(it) }
     }
 
     val primaryColor = Color(0xFF003366)
@@ -196,21 +220,24 @@ fun EditProfileContent(viewModel: ProfileViewModel, onSaveClicked: () -> Unit, o
                 .border(4.dp, primaryColor, CircleShape),
             contentAlignment = Alignment.Center
         ) {
-            // Tentukan model gambar: prioritaskan URI baru, jika tidak ada, gunakan path lama
             val imageModel: Any? = newImageUri ?: if (!existingImagePath.isNullOrEmpty()) File(existingImagePath!!) else null
-
             if (imageModel != null) {
                 Image(
                     painter = rememberAsyncImagePainter(model = imageModel),
                     contentDescription = "Profile Image Preview",
-                    modifier = Modifier.fillMaxSize().clip(CircleShape),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .clip(CircleShape),
                     contentScale = ContentScale.Crop
                 )
             } else {
                 Image(
                     painter = painterResource(id = R.drawable.profilekosong),
                     contentDescription = "Default Profile Image",
-                    modifier = Modifier.fillMaxSize().clip(CircleShape).padding(20.dp),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .clip(CircleShape)
+                        .padding(20.dp),
                     contentScale = ContentScale.Fit
                 )
             }
@@ -218,7 +245,9 @@ fun EditProfileContent(viewModel: ProfileViewModel, onSaveClicked: () -> Unit, o
 
         Button(
             onClick = { getImage.launch("image/*") },
-            modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 16.dp),
             colors = ButtonDefaults.buttonColors(containerColor = accentColor)
         ) {
             Text("Ubah Foto Profil", color = Color.Black)
@@ -231,17 +260,24 @@ fun EditProfileContent(viewModel: ProfileViewModel, onSaveClicked: () -> Unit, o
             modifier = Modifier.fillMaxWidth(),
             singleLine = true
         )
-
         Spacer(modifier = Modifier.height(16.dp))
-
         OutlinedTextField(
             value = email.value,
             onValueChange = { email.value = it },
             label = { Text("Email") },
             modifier = Modifier.fillMaxWidth(),
-            singleLine = true
+            singleLine = true,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
         )
-
+        Spacer(modifier = Modifier.height(16.dp))
+        OutlinedTextField(
+            value = phoneNumber.value,
+            onValueChange = { phoneNumber.value = it },
+            label = { Text("Nomor Telepon") },
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone)
+        )
         Spacer(modifier = Modifier.height(32.dp))
 
         Row(
@@ -257,7 +293,7 @@ fun EditProfileContent(viewModel: ProfileViewModel, onSaveClicked: () -> Unit, o
             }
             Button(
                 onClick = {
-                    viewModel.saveProfileChanges(name.value, email.value)
+                    viewModel.updateProfile(name.value, email.value, phoneNumber.value)
                     onSaveClicked()
                 },
                 modifier = Modifier.weight(1f),
@@ -290,4 +326,64 @@ fun InfoRow(label: String, value: String) {
             color = Color(0xFF003366)
         )
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun ReauthenticationDialog(
+    viewModel: ProfileViewModel,
+    onDismiss: () -> Unit,
+    newName: String,
+    newEmail: String,
+    newPhoneNumber: String
+) {
+    var password by remember { mutableStateOf("") }
+    val isLoading by viewModel.isLoading
+    val errorMessage by viewModel.reauthErrorMessage
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("Konfirmasi Identitas") },
+        text = {
+            Column {
+                Text("Untuk keamanan, silakan masukkan password Anda sekali lagi untuk menyimpan perubahan.")
+                Spacer(modifier = Modifier.height(16.dp))
+                OutlinedTextField(
+                    value = password,
+                    onValueChange = { password = it; viewModel.reauthErrorMessage.value = null },
+                    label = { Text("Password") },
+                    visualTransformation = PasswordVisualTransformation(),
+                    isError = errorMessage != null,
+                    singleLine = true
+                )
+                errorMessage?.let { message ->
+                    Text(
+                        text = message,
+                        color = MaterialTheme.colorScheme.error,
+                        style = MaterialTheme.typography.bodySmall,
+                        modifier = Modifier.padding(top = 4.dp)
+                    )
+                }
+            }
+        },
+        confirmButton = {
+            Button(
+                onClick = {
+                    viewModel.reauthenticateAndRetryUpdate(password, newName, newEmail, newPhoneNumber)
+                },
+                enabled = !isLoading
+            ) {
+                if (isLoading) {
+                    CircularProgressIndicator(modifier = Modifier.size(18.dp))
+                } else {
+                    Text("Konfirmasi")
+                }
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text("Batal")
+            }
+        }
+    )
 }

@@ -29,7 +29,6 @@ import com.tripnesia.mobile.viewmodel.ProfileViewModelFactory
 @Composable
 fun TripnesiaMainScreen() {
     val context = LocalContext.current
-    // Inisialisasi ViewModel menggunakan Factory untuk memberikan Context
     val viewModel: ProfileViewModel = viewModel(factory = ProfileViewModelFactory(context))
 
     val window = (context as? Activity)?.window

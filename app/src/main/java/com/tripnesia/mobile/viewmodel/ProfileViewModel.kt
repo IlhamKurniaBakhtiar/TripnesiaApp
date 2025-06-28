@@ -1,14 +1,17 @@
 // LOKASI: app/src/main/java/com/tripnesia/mobile/viewmodel/ProfileViewModel.kt
-// KODE LENGKAP YANG SUDAH DIPERBAIKI DENGAN FUNGSI LOGIN & REGISTER
+// VERSI LENGKAP DENGAN LOGGING UNTUK DEBUGGING
 
 package com.tripnesia.mobile.viewmodel
 
 import android.content.Context
 import android.net.Uri
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthRecentLoginRequiredException
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
@@ -26,15 +29,22 @@ class ProfileViewModel(private val context: Context) : ViewModel() {
 
     private val auth: FirebaseAuth = Firebase.auth
     private val database: DatabaseReference = Firebase.database.getReference("users")
+    private val TAG = "PROFILE_VM_DEBUG" // Tag untuk filter di Logcat
 
+    // --- State untuk data profil ---
     val name = mutableStateOf("")
     val email = mutableStateOf("")
+    val phoneNumber = mutableStateOf("")
     val profileImagePath = mutableStateOf<String?>(null)
-    val newProfileImageUri = mutableStateOf<Uri?>(null)
 
+    // --- State untuk UI & Alur Edit ---
+    val newProfileImageUri = mutableStateOf<Uri?>(null)
     val isLoading = mutableStateOf(false)
     val errorMessage = mutableStateOf<String?>(null)
+    val needsReauthentication = mutableStateOf(false)
+    val reauthErrorMessage = mutableStateOf<String?>(null)
 
+    // --- State untuk status login ---
     private val _isLoggedIn = MutableStateFlow(false)
     val isLoggedIn = _isLoggedIn.asStateFlow()
 
@@ -50,7 +60,141 @@ class ProfileViewModel(private val context: Context) : ViewModel() {
         }
     }
 
-    // === FUNGSI YANG HILANG, DITAMBAHKAN KEMBALI DI SINI ===
+    fun updateProfile(newName: String, newEmail: String, newPhoneNumber: String) {
+        isLoading.value = true
+        errorMessage.value = null
+        Log.d(TAG, "--- Mulai updateProfile ---")
+        Log.d(TAG, "Data Diterima: Name='$newName', Email='$newEmail', Phone='$newPhoneNumber'")
+
+        viewModelScope.launch {
+            val user = auth.currentUser ?: run {
+                errorMessage.value = "Pengguna tidak ditemukan."
+                isLoading.value = false
+                Log.e(TAG, "Gagal: User null saat akan update.")
+                return@launch
+            }
+
+            // 1. Coba update email di Auth
+            if (user.email != newEmail) {
+                Log.d(TAG, "Email berbeda. Mencoba update email di Firebase Auth...")
+                try {
+                    user.updateEmail(newEmail).await()
+                    Log.d(TAG, "SUKSES: Email di Firebase Auth berhasil diubah ke '$newEmail'")
+                } catch (e: FirebaseAuthRecentLoginRequiredException) {
+                    Log.w(TAG, "GAGAL: Butuh re-autentikasi untuk mengubah email. Menampilkan dialog...")
+                    needsReauthentication.value = true
+                    isLoading.value = false
+                    return@launch
+                } catch (e: Exception) {
+                    Log.e(TAG, "GAGAL: Terjadi error saat mengubah email di Auth.", e)
+                    errorMessage.value = "Gagal mengubah email: ${e.message}"
+                    isLoading.value = false
+                    return@launch
+                }
+            } else {
+                Log.d(TAG, "Email tidak berubah, melewati update email di Auth.")
+            }
+
+            // 2. Jika email berhasil diubah atau tidak ada perubahan, lanjutkan ke penyimpanan data
+            Log.d(TAG, "Melanjutkan ke penyimpanan data ke Realtime Database...")
+            saveAllDataToDatabase(newName, newEmail, newPhoneNumber)
+        }
+    }
+
+    fun reauthenticateAndRetryUpdate(password: String, newName: String, newEmail: String, newPhoneNumber: String) {
+        isLoading.value = true
+        reauthErrorMessage.value = null
+        Log.d(TAG, "--- Mulai reauthenticateAndRetryUpdate ---")
+        viewModelScope.launch {
+            try {
+                val user = auth.currentUser ?: throw Exception("User not found")
+                val credential = EmailAuthProvider.getCredential(user.email!!, password)
+                Log.d(TAG, "Mencoba re-autentikasi untuk user: ${user.email}")
+                user.reauthenticate(credential).await()
+                Log.d(TAG, "SUKSES: Re-autentikasi berhasil.")
+
+                needsReauthentication.value = false
+                Log.d(TAG, "Memanggil ulang updateProfile setelah re-autentikasi...")
+                updateProfile(newName, newEmail, newPhoneNumber)
+
+            } catch (e: Exception) {
+                Log.e(TAG, "GAGAL: Re-autentikasi gagal.", e)
+                reauthErrorMessage.value = "Password salah. Coba lagi."
+            } finally {
+                isLoading.value = false
+            }
+        }
+    }
+
+    private suspend fun saveAllDataToDatabase(newName: String, newEmail: String, newPhoneNumber: String) {
+        val user = auth.currentUser ?: return
+        try {
+            Log.d(TAG, "Memulai saveAllDataToDatabase...")
+            val finalImagePath: String? = withContext(Dispatchers.IO) {
+                newProfileImageUri.value?.let { uri ->
+                    Log.d(TAG, "Ada gambar baru, menyimpan ke internal storage...")
+                    saveImageToInternalStorage(uri, user.uid)
+                } ?: profileImagePath.value
+            }
+
+            val userData = mapOf(
+                "name" to newName,
+                "email" to newEmail,
+                "phoneNumber" to newPhoneNumber,
+                "profileImagePath" to finalImagePath
+            )
+            Log.d(TAG, "Data yang akan ditulis ke DB: $userData")
+
+            database.child(user.uid).updateChildren(userData).await()
+            Log.d(TAG, "SUKSES: Penulisan data ke Realtime Database berhasil.")
+
+            newProfileImageUri.value = null
+            fetchUserProfile()
+        } catch (e: Exception) {
+            Log.e(TAG, "GAGAL: Terjadi error saat menulis ke Realtime Database.", e)
+            errorMessage.value = "Gagal menyimpan data ke database: ${e.message}"
+        } finally {
+            isLoading.value = false
+            Log.d(TAG, "--- Proses updateProfile Selesai ---")
+        }
+    }
+
+    fun setNewProfileImageUri(uri: Uri) {
+        newProfileImageUri.value = uri
+    }
+
+    private fun fetchUserProfile() {
+        viewModelScope.launch {
+            val user = auth.currentUser ?: return@launch
+            val snapshot = database.child(user.uid).get().await()
+            if (snapshot.exists()) {
+                name.value = snapshot.child("name").getValue(String::class.java) ?: ""
+                email.value = snapshot.child("email").getValue(String::class.java) ?: ""
+                phoneNumber.value = snapshot.child("phoneNumber").getValue(String::class.java) ?: ""
+                profileImagePath.value = snapshot.child("profileImagePath").getValue(String::class.java)
+            }
+        }
+    }
+
+    private fun saveImageToInternalStorage(uri: Uri, userId: String): String? {
+        return try {
+            context.contentResolver.openInputStream(uri)?.use { inputStream ->
+                val file = File(context.filesDir, "profile_image_$userId.jpg")
+                FileOutputStream(file).use { outputStream ->
+                    inputStream.copyTo(outputStream)
+                }
+                file.absolutePath
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Gagal menyimpan gambar", e)
+            null
+        }
+    }
+
+    private fun clearUserData() {
+        name.value = ""; email.value = ""; phoneNumber.value = ""
+        profileImagePath.value = null; newProfileImageUri.value = null
+    }
 
     fun login(userEmail: String, userPass: String) {
         isLoading.value = true
@@ -58,7 +202,6 @@ class ProfileViewModel(private val context: Context) : ViewModel() {
         viewModelScope.launch {
             try {
                 auth.signInWithEmailAndPassword(userEmail, userPass).await()
-                // Jika berhasil, AuthStateListener akan otomatis menangani update UI
             } catch (e: Exception) {
                 errorMessage.value = "Login Gagal: ${e.message}"
             } finally {
@@ -72,18 +215,16 @@ class ProfileViewModel(private val context: Context) : ViewModel() {
         errorMessage.value = null
         viewModelScope.launch {
             try {
-                // 1. Buat user di Firebase Authentication
                 val result = auth.createUserWithEmailAndPassword(newEmail, newPass).await()
                 val user = result.user
                 if (user != null) {
-                    // 2. Siapkan data awal untuk disimpan di Realtime Database
-                    val userData = hashMapOf(
+                    val userData = hashMapOf<String, Any?>(
                         "name" to newName,
                         "email" to newEmail,
-                        "profileImagePath" to null // Awalnya tidak ada gambar
+                        "profileImagePath" to null,
+                        "phoneNumber" to null
                     )
                     database.child(user.uid).setValue(userData).await()
-                    // Langsung logout agar user login manual untuk pertama kali
                     auth.signOut()
                 }
             } catch (e: Exception) {
@@ -92,98 +233,6 @@ class ProfileViewModel(private val context: Context) : ViewModel() {
                 isLoading.value = false
             }
         }
-    }
-
-    // === BATAS AKHIR FUNGSI YANG DITAMBAHKAN ===
-
-
-    private fun fetchUserProfile() {
-        viewModelScope.launch {
-            val user = auth.currentUser ?: return@launch
-            try {
-                isLoading.value = true
-                val snapshot = database.child(user.uid).get().await()
-                if (snapshot.exists()) {
-                    name.value = snapshot.child("name").getValue(String::class.java) ?: ""
-                    email.value = snapshot.child("email").getValue(String::class.java) ?: ""
-                    profileImagePath.value = snapshot.child("profileImagePath").getValue(String::class.java)
-                }
-            } catch (e: Exception) {
-                errorMessage.value = "Gagal memuat profil: ${e.message}"
-            } finally {
-                isLoading.value = false
-            }
-        }
-    }
-
-    fun setNewProfileImage(uri: Uri) {
-        newProfileImageUri.value = uri
-    }
-
-    fun saveProfileChanges(newName: String, newEmail: String) {
-        isLoading.value = true
-        errorMessage.value = null
-
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                val user = auth.currentUser ?: throw Exception("User not logged in")
-                var finalImagePath: String? = profileImagePath.value
-
-                newProfileImageUri.value?.let { uri ->
-                    finalImagePath = saveImageToInternalStorage(uri, user.uid)
-                }
-
-                updateUserData(user, newName, newEmail, finalImagePath)
-
-                withContext(Dispatchers.Main) {
-                    newProfileImageUri.value = null
-                }
-
-                if (user.email != newEmail) {
-                    user.updateEmail(newEmail).await()
-                }
-
-            } catch (e: Exception) {
-                withContext(Dispatchers.Main) {
-                    errorMessage.value = "Gagal menyimpan: ${e.message}"
-                }
-            } finally {
-                withContext(Dispatchers.Main) {
-                    isLoading.value = false
-                }
-            }
-        }
-    }
-
-    private fun saveImageToInternalStorage(uri: Uri, userId: String): String {
-        val inputStream = context.contentResolver.openInputStream(uri)
-        val file = File(context.filesDir, "profile_image_$userId.jpg")
-        val outputStream = FileOutputStream(file)
-        inputStream?.use { input ->
-            outputStream.use { output ->
-                input.copyTo(output)
-            }
-        }
-        return file.absolutePath
-    }
-
-    private suspend fun updateUserData(user: com.google.firebase.auth.FirebaseUser, newName: String, newEmail: String, imagePath: String?) {
-        val userData = mapOf(
-            "name" to newName,
-            "email" to newEmail,
-            "profileImagePath" to imagePath
-        )
-        database.child(user.uid).updateChildren(userData).await()
-        withContext(Dispatchers.Main) {
-            fetchUserProfile()
-        }
-    }
-
-    private fun clearUserData() {
-        name.value = ""
-        email.value = ""
-        profileImagePath.value = null
-        newProfileImageUri.value = null
     }
 
     fun logout() {
