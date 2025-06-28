@@ -25,6 +25,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.tripnesia.mobile.R
 
 data class TeamMember(
@@ -59,6 +60,7 @@ val teamMembers = listOf(
     )
 )
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(modifier: Modifier = Modifier) {
     val configuration = LocalConfiguration.current
