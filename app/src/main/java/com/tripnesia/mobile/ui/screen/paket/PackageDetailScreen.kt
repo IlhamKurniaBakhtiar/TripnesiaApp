@@ -22,22 +22,36 @@ import androidx.compose.ui.platform.LocalContext
 import android.content.Intent
 import android.net.Uri
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
+import com.tripnesia.mobile.Database.getSnapToken
 import com.tripnesia.mobile.data.model.TravelPackage
 import com.tripnesia.mobile.ui.theme.primaryBlue
+import kotlinx.coroutines.coroutineScope
+import java.net.URLEncoder
+import kotlinx.coroutines.launch
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PackageDetailScreen(
     travelPackage: TravelPackage,
+    navController: NavController,
     onBack: () -> Unit
 ) {
+    val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
+    val user = Firebase.auth.currentUser
+    val userName = user?.displayName ?: "Pengguna"
+    val userEmail = user?.email ?: "pengguna@example.com"
     val imageResId = remember(travelPackage.imageUrl) {
         context.resources.getIdentifier(travelPackage.imageUrl, "drawable", context.packageName)
     }
@@ -120,7 +134,27 @@ fun PackageDetailScreen(
                 // Tombol Pemesanan
                 Button(
                     onClick = {
-                        // Nanti bisa buka WhatsApp atau Midtrans checkout
+                        coroutineScope.launch {
+                            try {
+                                val snapToken = getSnapToken(
+                                    orderId = "ORDER-${System.currentTimeMillis()}",
+                                    amount = travelPackage.price,
+                                    name = userName,
+                                    email = userEmail
+                                )
+
+                                if (snapToken != null) {
+                                    val snapUrl = "https://app.sandbox.midtrans.com/snap/v2/vtweb/$snapToken"
+                                    Toast.makeText(context, "Token OK", Toast.LENGTH_SHORT).show()
+                                    navController.navigate("payment_screen/${URLEncoder.encode(snapUrl, "UTF-8")}")
+                                } else {
+                                    Toast.makeText(context, "Gagal dapat Snap Token", Toast.LENGTH_SHORT).show()
+                                }
+                            } catch (e: Exception) {
+                                e.printStackTrace()
+                                Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_LONG).show()
+                            }
+                        }
                     },
                     modifier = Modifier.fillMaxWidth(),
                     colors = ButtonDefaults.buttonColors(

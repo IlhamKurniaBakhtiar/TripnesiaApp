@@ -6,6 +6,9 @@ import com.tripnesia.mobile.data.model.Destination
 import com.tripnesia.mobile.data.model.TravelPackage
 import com.tripnesia.mobile.data.dummy.TravelPackageData
 import com.tripnesia.mobile.data.dummy.sampleEvents
+import com.tripnesia.mobile.data.model.Event
+
+import com.tripnesia.mobile.data.dummy.sampleEvents
 
 fun uploadDataToFirebase() {
     val database = FirebaseDatabase.getInstance()
