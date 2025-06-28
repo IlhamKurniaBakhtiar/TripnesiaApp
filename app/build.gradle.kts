@@ -52,6 +52,8 @@ dependencies {
     implementation("com.google.android.gms:play-services-maps:18.1.0")
     implementation("com.google.firebase:firebase-database:21.0.0")
     implementation("androidx.compose.material:material-icons-extended:1.4.0")
+    implementation("androidx.compose.foundation:foundation:1.4.0") // Versi lama, tidak konsisten dengan BOM
+    implementation("androidx.compose.animation:animation:1.4.0")
     implementation("androidx.core:core-ktx:1.13.1") // Versi bisa berbeda
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.0") // Versi bisa berbeda
     implementation("androidx.activity:activity-compose:1.9.0") // Versi bisa berbeda

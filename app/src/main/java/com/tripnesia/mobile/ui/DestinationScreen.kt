@@ -91,6 +91,12 @@ fun DestinationCard(
     val imageResId = remember(destination.imageUrl) {
         context.resources.getIdentifier(destination.imageUrl, "drawable", context.packageName)
     }
+
+    val imagePainter = if (imageResId != 0) {
+        painterResource(id = imageResId)
+    } else {
+        painterResource(id = R.drawable.raja_ampat) // fallback image
+    }
     Card(
         modifier = modifier
             .padding(4.dp)
@@ -103,7 +109,7 @@ fun DestinationCard(
     ) {
         Column {
             Image(
-                painter = painterResource(id = imageResId),
+                painter = imagePainter,
                 contentDescription = destination.title,
                 modifier = Modifier
                     .fillMaxWidth()
