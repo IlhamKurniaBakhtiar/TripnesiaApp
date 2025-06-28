@@ -1,6 +1,3 @@
-// LOKASI: app/src/main/java/com/tripnesia/mobile/viewmodel/ProfileViewModel.kt
-// VERSI LENGKAP DENGAN LOGGING UNTUK DEBUGGING
-
 package com.tripnesia.mobile.viewmodel
 
 import android.content.Context
@@ -31,13 +28,11 @@ class ProfileViewModel(private val context: Context) : ViewModel() {
     private val database: DatabaseReference = Firebase.database.getReference("users")
     private val TAG = "PROFILE_VM_DEBUG" // Tag untuk filter di Logcat
 
-    // --- State untuk data profil ---
     val name = mutableStateOf("")
     val email = mutableStateOf("")
     val phoneNumber = mutableStateOf("")
     val profileImagePath = mutableStateOf<String?>(null)
 
-    // --- State untuk UI & Alur Edit ---
     val newProfileImageUri = mutableStateOf<Uri?>(null)
     val isLoading = mutableStateOf(false)
     val errorMessage = mutableStateOf<String?>(null)
@@ -45,7 +40,6 @@ class ProfileViewModel(private val context: Context) : ViewModel() {
     val reauthErrorMessage = mutableStateOf<String?>(null)
     val passwordResetEmailSent = mutableStateOf(false)
 
-    // --- State untuk status login ---
     private val _isLoggedIn = MutableStateFlow(false)
     val isLoggedIn = _isLoggedIn.asStateFlow()
 
@@ -75,7 +69,6 @@ class ProfileViewModel(private val context: Context) : ViewModel() {
                 return@launch
             }
 
-            // 1. Coba update email di Auth
             if (user.email != newEmail) {
                 Log.d(TAG, "Email berbeda. Mencoba update email di Firebase Auth...")
                 try {
@@ -96,7 +89,6 @@ class ProfileViewModel(private val context: Context) : ViewModel() {
                 Log.d(TAG, "Email tidak berubah, melewati update email di Auth.")
             }
 
-            // 2. Jika email berhasil diubah atau tidak ada perubahan, lanjutkan ke penyimpanan data
             Log.d(TAG, "Melanjutkan ke penyimpanan data ke Realtime Database...")
             saveAllDataToDatabase(newName, newEmail, newPhoneNumber)
         }
@@ -247,7 +239,7 @@ class ProfileViewModel(private val context: Context) : ViewModel() {
             try {
                 auth.sendPasswordResetEmail(email).await()
                 Log.d(TAG, "Email reset password berhasil dikirim ke $email")
-                passwordResetEmailSent.value = true // Beri tahu UI untuk menampilkan pesan sukses
+                passwordResetEmailSent.value = true
             } catch (e: Exception) {
                 Log.e(TAG, "Gagal mengirim email reset password", e)
                 errorMessage.value = "Gagal: ${e.message}"

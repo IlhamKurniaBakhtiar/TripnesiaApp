@@ -1,6 +1,3 @@
-// LOKASI: app/src/main/java/com/tripnesia/mobile/ui/RegisterScreen.kt
-// KODE LENGKAP DAN FINAL
-
 package com.tripnesia.mobile.ui
 
 import androidx.compose.foundation.Image
@@ -27,7 +24,6 @@ import androidx.compose.ui.unit.sp
 import com.tripnesia.mobile.R
 import com.tripnesia.mobile.viewmodel.ProfileViewModel
 
-// Definisikan warna-warna kustom agar mudah diubah
 private val cardBackgroundColor = Color(0xFFF5F1E9)
 private val textFieldBackgroundColor = Color(0xFFE8E2D9)
 private val buttonColor = Color(0xFF1E6A6B)
@@ -48,7 +44,6 @@ fun RegisterScreen(
     val errorMessage by viewModel.errorMessage
     var passwordMismatchError by remember { mutableStateOf(false) }
 
-    // Latar belakang gambar fullscreen
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
             painter = painterResource(id = R.drawable.login_background),
@@ -57,12 +52,10 @@ fun RegisterScreen(
             contentScale = ContentScale.Crop
         )
 
-        // Kartu Form Registrasi di tengah
         Box(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
-            // Kolom ini bisa di-scroll agar tidak tertutup keyboard
             Column(
                 modifier = Modifier
                     .fillMaxWidth(0.85f)
@@ -90,7 +83,6 @@ fun RegisterScreen(
 
                 Spacer(modifier = Modifier.height(24.dp))
 
-                // Custom TextField untuk Nama Lengkap
                 TextField(
                     value = name,
                     onValueChange = { name = it },
@@ -112,7 +104,6 @@ fun RegisterScreen(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // Custom TextField untuk Email
                 TextField(
                     value = email,
                     onValueChange = { email = it },
@@ -135,7 +126,6 @@ fun RegisterScreen(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // Custom TextField untuk Password
                 TextField(
                     value = password,
                     onValueChange = { password = it; passwordMismatchError = false },
@@ -159,7 +149,6 @@ fun RegisterScreen(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // Custom TextField untuk Konfirmasi Password
                 TextField(
                     value = confirmPassword,
                     onValueChange = { confirmPassword = it; passwordMismatchError = false },

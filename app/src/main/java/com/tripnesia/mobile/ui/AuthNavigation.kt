@@ -43,11 +43,9 @@ fun AuthNavigation(viewModel: ProfileViewModel) {
                 ForgotPasswordScreen(
                     viewModel = viewModel,
                     onEmailSent = {
-                        // Kembali ke layar login setelah email dikirim
                         navController.popBackStack()
                     },
                     onNavigateBackToLogin = {
-                        // Kembali ke layar login jika user menekan "Kembali"
                         navController.popBackStack()
                     }
                 )
