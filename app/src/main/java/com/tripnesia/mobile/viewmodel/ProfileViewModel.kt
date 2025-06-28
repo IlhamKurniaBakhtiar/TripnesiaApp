@@ -43,6 +43,7 @@ class ProfileViewModel(private val context: Context) : ViewModel() {
     val errorMessage = mutableStateOf<String?>(null)
     val needsReauthentication = mutableStateOf(false)
     val reauthErrorMessage = mutableStateOf<String?>(null)
+    val passwordResetEmailSent = mutableStateOf(false)
 
     // --- State untuk status login ---
     private val _isLoggedIn = MutableStateFlow(false)
@@ -238,4 +239,22 @@ class ProfileViewModel(private val context: Context) : ViewModel() {
     fun logout() {
         auth.signOut()
     }
+
+    fun sendPasswordResetEmail(email: String) {
+        isLoading.value = true
+        errorMessage.value = null
+        viewModelScope.launch {
+            try {
+                auth.sendPasswordResetEmail(email).await()
+                Log.d(TAG, "Email reset password berhasil dikirim ke $email")
+                passwordResetEmailSent.value = true // Beri tahu UI untuk menampilkan pesan sukses
+            } catch (e: Exception) {
+                Log.e(TAG, "Gagal mengirim email reset password", e)
+                errorMessage.value = "Gagal: ${e.message}"
+            } finally {
+                isLoading.value = false
+            }
+        }
+    }
 }
+

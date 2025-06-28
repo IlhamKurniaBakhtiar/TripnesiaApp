@@ -22,6 +22,9 @@ fun AuthNavigation(viewModel: ProfileViewModel) {
                     viewModel = viewModel,
                     onNavigateToRegister = {
                         navController.navigate("register")
+                    },
+                    onNavigateToForgotPassword = {
+                        navController.navigate("forgot_password")
                     }
                 )
             }
@@ -32,6 +35,19 @@ fun AuthNavigation(viewModel: ProfileViewModel) {
                         navController.popBackStack()
                     },
                     onNavigateToLogin = {
+                        navController.popBackStack()
+                    }
+                )
+            }
+            composable("forgot_password") {
+                ForgotPasswordScreen(
+                    viewModel = viewModel,
+                    onEmailSent = {
+                        // Kembali ke layar login setelah email dikirim
+                        navController.popBackStack()
+                    },
+                    onNavigateBackToLogin = {
+                        // Kembali ke layar login jika user menekan "Kembali"
                         navController.popBackStack()
                     }
                 )
