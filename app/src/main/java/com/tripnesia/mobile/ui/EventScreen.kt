@@ -20,6 +20,10 @@ fun EventScreen(
     val events by viewModel.events.collectAsState()
     val selectedEvent by viewModel.selectedEvent.collectAsState()
 
+    LaunchedEffect(Unit) {
+        viewModel.insertDummyEvents()
+    }
+
     if (selectedEvent == null) {
         Column(
             modifier = modifier

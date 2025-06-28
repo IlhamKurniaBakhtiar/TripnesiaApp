@@ -1,4 +1,4 @@
-package com.tripnesia.mobile.viewmodel
+package com.tripnesia.mobile.ui
 
 import androidx.lifecycle.ViewModel
 import com.tripnesia.mobile.data.dummy.DestinationData
