@@ -1,6 +1,3 @@
-// LOKASI: app/src/main/java/com/tripnesia/mobile/ui/ProfileScreen.kt
-// KODE LENGKAP YANG DIBANGUN ULANG DAN STABIL
-
 package com.tripnesia.mobile.ui
 
 import android.net.Uri
@@ -39,16 +36,13 @@ import java.io.File
 fun ProfileScreen(viewModel: ProfileViewModel) {
     var isEditMode by remember { mutableStateOf(false) }
 
-    // State untuk menyimpan data asli sebelum diedit (untuk fitur "Batal")
     val originalName = remember { mutableStateOf("") }
     val originalEmail = remember { mutableStateOf("") }
     val originalImagePath = remember { mutableStateOf<String?>(null) }
     val originalPhoneNumber = remember { mutableStateOf("") }
 
-    // Ambil state pemicu dialog dari ViewModel
     val needsReauth by viewModel.needsReauthentication
 
-    // Tampilkan dialog jika state-nya true
     if (needsReauth) {
         ReauthenticationDialog(
             viewModel = viewModel,
@@ -59,7 +53,6 @@ fun ProfileScreen(viewModel: ProfileViewModel) {
         )
     }
 
-    // "Memotret" data asli saat akan masuk ke mode edit
     LaunchedEffect(isEditMode) {
         if (isEditMode) {
             originalName.value = viewModel.name.value
