@@ -1,13 +1,10 @@
 package com.tripnesia.mobile.viewmodel
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.tripnesia.mobile.data.dummy.DestinationData
 import com.tripnesia.mobile.data.model.Destination
 import com.google.firebase.database.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
 
 class DestinationViewModel : ViewModel() {
 

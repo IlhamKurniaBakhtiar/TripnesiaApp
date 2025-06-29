@@ -45,7 +45,6 @@ fun PaymentScreen(
                             onPaymentFinished()
                         }
 
-                        //  Cegah HTTP redirect yang error (http://example.com)
                         if (url?.startsWith("http://") == true) {
                             view?.stopLoading()
                         }
@@ -62,7 +61,6 @@ fun PaymentScreen(
                         }
 
                         if (url.startsWith("http://")) {
-                            // Blokir semua HTTP non-HTTPS
                             return true
                         }
 
