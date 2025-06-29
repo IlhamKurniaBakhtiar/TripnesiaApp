@@ -2,9 +2,7 @@
 <project version="4">
   <component name="deploymentTargetSelector">
     <selectionStates>
-
-      // <SelectionState runConfigName="TripnesiaMobile.app">
-      <SelectionState runConfigName="app">
+      <SelectionState runConfigName="TripnesiaMobile.app">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>

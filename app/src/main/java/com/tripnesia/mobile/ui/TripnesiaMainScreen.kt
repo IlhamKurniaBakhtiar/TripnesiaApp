@@ -20,6 +20,7 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import com.tripnesia.mobile.ui.components.BottomNavItem
+import com.tripnesia.mobile.ui.screen.destination.NavigationDestination
 import com.tripnesia.mobile.ui.screen.paket.NavigationPackage
 import com.tripnesia.mobile.ui.theme.primaryBlue
 import com.tripnesia.mobile.viewmodel.ProfileViewModel

@@ -2,21 +2,23 @@ const express = require('express');
 const cors = require('cors');
 const midtransClient = require('midtrans-client');
 const nodemailer = require('nodemailer');
-require('dotenv').config(); // jika menggunakan .env lokal saat testing
+require('dotenv').config();
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Konfigurasi Midtrans Snap
 const snap = new midtransClient.Snap({
-  isProduction: false, // ganti true jika sudah live
+  isProduction: false,
   serverKey: process.env.MIDTRANS_SERVER_KEY || 'SB-Mid-server-vWBw6sO1wPbKUeUNPyXIuymH',
 });
 
-// Endpoint membuat transaksi dan mendapatkan Snap Token
 app.post('/create-transaction', async (req, res) => {
   const { orderId, amount, name, email } = req.body;
+
+  if (!orderId || !amount || !name || !email) {
+    return res.status(400).json({ error: 'Missing required fields' });
+  }
 
   const parameter = {
     transaction_details: {
@@ -31,26 +33,29 @@ app.post('/create-transaction', async (req, res) => {
 
   try {
     const transaction = await snap.createTransaction(parameter);
+    console.log(" Midtrans transaction created:", transaction.token);
     res.json({ token: transaction.token });
   } catch (err) {
-    console.error('Midtrans error:', err.message);
+    console.error(' Midtrans error:', err.message);
     res.status(500).json({ error: 'Failed to create transaction' });
   }
 });
 
-// Endpoint mengirim invoice melalui email
 app.post('/send-invoice', async (req, res) => {
   const { name, email, orderId, amount } = req.body;
 
-  if (!email || !orderId || !amount) {
+  if (!email || !orderId || !amount || !name) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
+
+  console.log(" Email request received:", { name, email, orderId, amount });
+  console.log(" Using EMAIL_USER:", process.env.EMAIL_USER);
 
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-      user: process.env.EMAIL_USER, // harus diset di Railway
-      pass: process.env.EMAIL_PASS  // harus diset di Railway
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS
     }
   });
 
@@ -68,17 +73,17 @@ app.post('/send-invoice', async (req, res) => {
   };
 
   try {
-    await transporter.sendMail(mailOptions);
-    console.log('Invoice sent to', email);
+    const info = await transporter.sendMail(mailOptions);
+    console.log('Invoice sent:', info.response);
     res.status(200).json({ message: 'Invoice sent successfully' });
   } catch (error) {
-    console.error('Send mail error:', error);
-    res.status(500).json({ error: 'Failed to send invoice' });
+    console.error(' Send mail error:', error);
+    res.status(500).json({ error: 'Failed to send invoice', detail: error.message });
   }
 });
 
-// Start server
+// Run server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`✅ Server ready on port ${PORT}`);
+  console.log(` Server ready on port ${PORT}`);
 });

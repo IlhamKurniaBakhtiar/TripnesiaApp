@@ -1,4 +1,4 @@
-package com.tripnesia.mobile.ui
+package com.tripnesia.mobile.ui.screen.destination
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -24,12 +24,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
-import com.tripnesia.mobile.data.dummy.DestinationData
 import com.tripnesia.mobile.data.model.Destination
 import com.tripnesia.mobile.R
-import com.tripnesia.mobile.ui.NavigationDestination
 import com.tripnesia.mobile.viewmodel.DestinationViewModel
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
@@ -95,7 +92,7 @@ fun DestinationCard(
     val imagePainter = if (imageResId != 0) {
         painterResource(id = imageResId)
     } else {
-        painterResource(id = R.drawable.raja_ampat) // fallback image
+        painterResource(id = R.drawable.raja_ampat)
     }
     Card(
         modifier = modifier

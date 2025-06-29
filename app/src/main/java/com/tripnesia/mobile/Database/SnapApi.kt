@@ -26,7 +26,7 @@ suspend fun getSnapToken(
         """.trimIndent()
 
         val request = Request.Builder()
-            .url("https://tripnesia-production.up.railway.app/create-transaction") // Ganti sesuai URL kamu
+            .url("https://tripnesia-production.up.railway.app/create-transaction")
             .post(jsonBody.toRequestBody(mediaType))
             .build()
 
